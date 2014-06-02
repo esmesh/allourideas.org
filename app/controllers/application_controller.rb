@@ -241,7 +241,7 @@ class ApplicationController < ActionController::Base
   
   def render_error(exception)
     log_error(exception)
-    notify_airbrake(exception)
+    #notify_airbrake(exception)
 
     render :template => "errors/500.html.haml", :status => 500
   end
