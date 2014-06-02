@@ -19,3 +19,5 @@ config.action_mailer.raise_delivery_errors = false
 
 ActiveSupport::XmlMini.backend = 'LibXML'
 Paperclip.options[:command_path] = "/usr/bin/"
+
+config.log_level = :debug
