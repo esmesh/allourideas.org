@@ -37,7 +37,7 @@
           %legend= t('questions.new.step2')
           .control-group
             .input-prepend
-              %label.add-on{:for => "question_url"} http://vm-006.casci.rit.edu/
+              %label.add-on{:for => "question_url"} http://aoi.casci.rit.edu/
               = f.text_field 'url', :class => 'required span4', :placeholder => (@question && @question.url) || t('questions.new.step2_exp')
             = hidden_field_tag 'default_text2', t('questions.new.step2_exp')
             

@@ -1048,8 +1048,11 @@ class QuestionsController < ApplicationController
   # GET /questions/new
   # GET /questions/new.xml
   def new
+    logger.info("questions_controller::new 1")
     @errors ||= []
+    logger.info("questions_controller::new 2")
     @question = Question.new
+    logger.info("questions_controller::new 3")
 
     respond_to do |format|
       format.html # new.html.erb
@@ -1067,12 +1070,21 @@ class QuestionsController < ApplicationController
   # POST /questions
   # POST /questions.xml
   def create
+    logger.info("!!!!!")
+    logger.info("API Info site: #{APP_CONFIG[:API_HOST]}, user: #{APP_CONFIG[:PAIRWISE_USERNAME]}, password: #{APP_CONFIG[:PAIRWISE_PASSWORD]}")
+    logger.info("!!!!!")
+    logger.info("questions_controller::create 1")
+    logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url)}"
     @question = Question.new(params[:question].slice(:name, :ideas, :url))
+    logger.info("Created new question!")
+    logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
                      :password => params[:question]['password'],
                      :password_confirmation => params[:question]['password']) unless signed_in?
+    logger.info("Created new user!")
 
     if question_params_valid
+      logger.info("questions_controller::create 2")
       earl_options = {:question_id => @question.id, :name => params[:question]['url'].strip}
       earl_options.merge!(:flag_enabled => true, :photocracy => true) if @photocracy # flag is enabled by default for photocracy
       earl = current_user.earls.create(earl_options)
@@ -1091,11 +1103,16 @@ class QuestionsController < ApplicationController
   end
 
   def question_params_valid
+    logger.info("question_params_valid 1")
+    
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
+      logger.info("question_params_valid 2")
       @question.attributes.merge!({'local_identifier' => current_user.id,
                                   'visitor_identifier' => @survey_session.session_id})
+      logger.info("question_params_valid 3")
       return true if @question.save
     else
+      logger.info("question_params_valid 4")
       return false
     end
   end
