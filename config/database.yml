@@ -11,7 +11,7 @@ development: &default
 production: 
   <<: *default
   username: root
-  password: F2XFP0Sast8P7V9eIjfoOWrmA8FTSZfNfiA4nqPaKI2Tas3zRIiy8kYsjeN6ki3
+  password: <%= ENV['SQL_DB_PASSWORD'] %>
   database: aoi_production
   host: localhost
 
