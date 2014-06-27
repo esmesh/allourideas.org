@@ -2,7 +2,7 @@
 class PromptsController < ApplicationController
   include ActionView::Helpers::TextHelper
 
-  def vote
+  def vote    
     bingo!("voted")
     voted_prompt = Prompt.new
     voted_prompt.id = params[:id]
@@ -21,8 +21,10 @@ class PromptsController < ApplicationController
       next_prompt = Hash.from_xml(vote.body)['prompt']
 
       result = {
-        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
-        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
+        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
+        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_title'], :length => 140, :omission => '…')),
+        :newleftText       => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
+        :newrightText      => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
         :left_choice_id    => next_prompt['left_choice_id'],
         :left_choice_url   => question_choice_path(@earl.name, next_prompt['left_choice_id']),
         :right_choice_id   => next_prompt['right_choice_id'],
@@ -35,13 +37,15 @@ class PromptsController < ApplicationController
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
         # that represents their image id
-        result[:left_image_id] = CGI::escapeHTML(next_prompt['left_choice_text'].split('-',2)[0])
-        result[:right_image_id] = CGI::escapeHTML(next_prompt['right_choice_text'].split('-',2)[0])
-        result[:newleft] = CGI::escapeHTML(truncate(next_prompt['left_choice_text'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
-        result[:newright] = CGI::escapeHTML(truncate(next_prompt['right_choice_text'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
+        result[:left_image_id] = CGI::escapeHTML(next_prompt['left_choice_title'].split('-',2)[0])
+        result[:right_image_id] = CGI::escapeHTML(next_prompt['right_choice_title'].split('-',2)[0])
+        result[:newleft] = CGI::escapeHTML(truncate(next_prompt['left_choice_title'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
+        result[:newright] = CGI::escapeHTML(truncate(next_prompt['right_choice_title'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
       end
 
       result = add_photocracy_info(result, next_prompt, params[:question_id]) if @photocracy
+      
+      puts "RESULT"      
       render :json => result.to_json
     else
       render :text => 'Vote unsuccessful.', :status => :unprocessable_entity
@@ -62,8 +66,10 @@ class PromptsController < ApplicationController
       next_prompt = Crack::XML.parse(skip.body)['prompt']
 
       result = {
-        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
-        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
+        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
+        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_title'], :length => 140, :omission => '…')),
+        :newleftText       => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
+        :newrightText      => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
         :appearance_lookup => next_prompt['appearance_id'],
         :prompt_id         => next_prompt['id'],
         :left_choice_id    => next_prompt['left_choice_id'],
@@ -77,10 +83,10 @@ class PromptsController < ApplicationController
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
         # that represents their image id
-        result[:left_image_id] = CGI::escapeHTML(next_prompt['left_choice_text'].split('-',2)[0])
-        result[:right_image_id] = CGI::escapeHTML(next_prompt['right_choice_text'].split('-',2)[0])
-        result[:newleft] = CGI::escapeHTML(truncate(next_prompt['left_choice_text'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
-        result[:newright] = CGI::escapeHTML(truncate(next_prompt['right_choice_text'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
+        result[:left_image_id] = CGI::escapeHTML(next_prompt['left_choice_title'].split('-',2)[0])
+        result[:right_image_id] = CGI::escapeHTML(next_prompt['right_choice_title'].split('-',2)[0])
+        result[:newleft] = CGI::escapeHTML(truncate(next_prompt['left_choice_title'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
+        result[:newright] = CGI::escapeHTML(truncate(next_prompt['right_choice_title'].split('-',2)[1], :length => 140, :omission => '…')).gsub("\n","<br />")
       end
 
       result = add_photocracy_info(result, next_prompt, params[:question_id]) if @photocracy
@@ -126,8 +132,10 @@ class PromptsController < ApplicationController
       next_prompt = Crack::XML.parse(skip.body)['prompt']
 
       result = {
-        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
-        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
+        :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
+        :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_title'], :length => 140, :omission => '…')),
+        :newleftText       => CGI::escapeHTML(truncate(next_prompt['left_choice_text'], :length => 140, :omission => '…')),
+        :newrightText      => CGI::escapeHTML(truncate(next_prompt['right_choice_text'], :length => 140, :omission => '…')),
         :appearance_lookup => next_prompt['appearance_id'],
         :left_choice_id    => next_prompt['left_choice_id'],
         :left_choice_url   => question_choice_path(@earl.name, next_prompt['left_choice_id']),
@@ -153,10 +161,10 @@ class PromptsController < ApplicationController
 
   private
   def add_photocracy_info(result, next_prompt, question_id)
-    newright_photo     = Photo.find(next_prompt['right_choice_text'])
-    newleft_photo      = Photo.find(next_prompt['left_choice_text'])
-    future_left_photo  = Photo.find(next_prompt['future_left_choice_text_1'])
-    future_right_photo = Photo.find(next_prompt['future_right_choice_text_1'])
+    newright_photo     = Photo.find(next_prompt['right_choice_title'])
+    newleft_photo      = Photo.find(next_prompt['left_choice_title'])
+    future_left_photo  = Photo.find(next_prompt['future_left_choice_title_1'])
+    future_right_photo = Photo.find(next_prompt['future_right_choice_title_1'])
 
     result.merge!({
       :visitor_votes        => next_prompt['visitor_votes'],

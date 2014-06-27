@@ -94,12 +94,16 @@
     function loadNewPrompts(data) {
       var oldLeftDiv = $('.leftside.btn-vote-idea').closest('div');
       var oldRightDiv = $('.rightside.btn-vote-idea').closest('div');
+      
+      var oldInfoLeft = $('#left_choice_exp');
+      var oldInfoRight = $('#right_choice_exp');
+      
       var newLeftDiv = oldLeftDiv.clone(true).hide();
       var newRightDiv = oldRightDiv.clone(true).hide();
       var newLeft = newLeftDiv.find('.btn-vote-idea');
       var newRight = newRightDiv.find('.btn-vote-idea');
       var bothNew = newLeft.add(newRight);
-
+      
       bothNew.addClass('btn-primary').removeClass('btn-success').removeClass('disabled');
 
       newLeft.html(data.newleft);
@@ -108,17 +112,24 @@
       newLeft.data('choice_url', data.left_choice_url);
       newRight.data('choice_id', data.right_choice_id);
       newRight.data('choice_url', data.right_choice_url);
+       
+      oldInfoLeft.find('.modal-header').find('h2').text(data.newleft);      
+      oldInfoLeft.find('.modal-body').text(data.newleftText);
+      
+      oldInfoRight.find('.modal-header').find('h2').text(data.newright);
+      oldInfoRight.find('.modal-body').text(data.newrightText);
 
       newLeftDiv.insertBefore(oldLeftDiv);
       newRightDiv.insertBefore(oldRightDiv);
+      
 
       // update can't decide options
       $('.cd_options .leftside em').html(data.newleft);
       $('.cd_options .rightside em').html(data.newright);
 
       //used for fraud detection / back button behavior fixing
-      $('#left_side_text').val(data.newleft);
-      $('#right_side_text').val(data.newright);
+      $('#left_side_title').val(data.newleft);
+      $('#right_side_title').val(data.newright);
 
       // animation for sliding in / out choices
       newLeftDiv.add(newRightDiv).slideDown();
