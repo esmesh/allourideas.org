@@ -3,7 +3,7 @@ class QuestionsController < ApplicationController
   require 'crack'
   require 'geokit'
   before_filter :authenticate, :only => [:new, :admin, :toggle, :toggle_autoactivate, :update, :delete_logo, :export, :add_photos, :update_name]
-  before_filter :admin_only, :only => [:index, :admin_stats]
+  before_filter :admin_only, :only => [:index, :admin_stats, :new]
   #caches_page :results
 
   # GET /questions
@@ -1049,11 +1049,11 @@ class QuestionsController < ApplicationController
   # GET /questions/new.xml
   def new
     
-    unless (current_user.admin?)
-      logger.info("Current user is: #{current_user.inspect}")
-      flash[:notice] = t('user.not_authorized_to_create_error')
-      redirect_to(root_url) and return
-    end
+    #unless (current_user.admin?)
+    #  logger.info("Current user is: #{current_user.inspect}")
+    #  flash[:notice] = t('user.not_authorized_to_create_error')
+    #  redirect_to(root_url) and return
+    #end
     
     logger.info("questions_controller::new 1")
     @errors ||= []
