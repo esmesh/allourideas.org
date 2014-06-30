@@ -32,6 +32,7 @@
             %tr{"data-admin-stats" => current_user.admin? ? admin_stats_question_url(q.id, :format => :json) : nil}
               %td.title= link_to h(truncate(q.attributes['name'], :length => 140, :omission => '…')), url_for(:controller => :questions, :action => :admin, :id => earl.name)
               %td= q.votes_count
+              %td= q.recent_votes
               -if current_user.admin?
                 %td= q.user_ideas
                 %td= q.active_user_ideas
