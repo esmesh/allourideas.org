@@ -1047,14 +1047,7 @@ class QuestionsController < ApplicationController
 
   # GET /questions/new
   # GET /questions/new.xml
-  def new
-    
-    #unless (current_user.admin?)
-    #  logger.info("Current user is: #{current_user.inspect}")
-    #  flash[:notice] = t('user.not_authorized_to_create_error')
-    #  redirect_to(root_url) and return
-    #end
-    
+  def new    
     logger.info("questions_controller::new 1")
     @errors ||= []
     logger.info("questions_controller::new 2")
