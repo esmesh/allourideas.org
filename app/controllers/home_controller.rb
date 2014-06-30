@@ -46,7 +46,6 @@ class HomeController < ApplicationController
         @earls = Earl.find(:all, :conditions => {:photocracy => false})
       end
       all = params[:all] == 'true'
-      binding.pry
       @questions = Question.find(:all, :params => {
                                    :votes_since => Date.today,
                                    :user_ideas => true,
