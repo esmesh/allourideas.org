@@ -1,3 +1,4 @@
+require 'pry'
 class HomeController < ApplicationController
   include ActionView::Helpers::TextHelper
   #caches_page :about, :tour, :privacy
@@ -45,12 +46,13 @@ class HomeController < ApplicationController
         @earls = Earl.find(:all, :conditions => {:photocracy => false})
       end
       all = params[:all] == 'true'
+      binding.pry
       @questions = Question.find(:all, :params => {
                                    :votes_since => Date.today,
                                    :user_ideas => true,
                                    :active_user_ideas => true,
-                                   :all => all })
-
+                                   :all => true })
+      
       @available_charts = {}
       @available_charts['votes'] = { :title => "Number of all votes over time"}
       @available_charts['user_submitted_ideas'] = { :title => "Number of all submitted ideas over time"}
