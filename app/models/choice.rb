@@ -9,6 +9,10 @@ class Choice < ActiveResource::Base
     prefix_options[:question_id]
   end
   
+  def title
+    attributes['title']
+  end
+  
   def data
     attributes['data']
   end
