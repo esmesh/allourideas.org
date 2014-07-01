@@ -1,2 +1,5 @@
-class UsersController < Clearance::UsersController
-end
+#class UsersController < Clearance::UsersController
+#  
+#  
+#  
+#end

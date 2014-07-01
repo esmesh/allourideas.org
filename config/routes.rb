@@ -1,5 +1,7 @@
 ActionController::Routing::Routes.draw do |map|
   map.resource :session, :controller => "clearance/sessions", :only => [:new, :create, :destroy]
+  map.resource :users, :controller => "clearance/users", :only => [:new, :create]
+  map.signup '/sign_up', :controller => "clearance/users", :action => :new
   map.signin '/sign_in', :controller => "clearance/sessions", :action => :new
   map.signout '/sign_out', :controller => "clearance/sessions", :action => :destroy
   map.resource :passwords, :controller => "clearance/passwords"
