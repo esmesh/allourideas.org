@@ -3,6 +3,7 @@ class EarlsController < ApplicationController
   include ActionView::Helpers::TextHelper
   include ActionView::Helpers::AssetTagHelper
   before_filter :dumb_cleartext_authentication, :except => :export_list
+  before_filter :authenticate, :only => [:show]
 
   def show
     session[:welcome_msg] = @earl.welcome_message.blank? ? nil: @earl.welcome_message
