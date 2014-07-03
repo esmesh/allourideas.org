@@ -28,7 +28,7 @@
   .row-fluid
     .span10.offset1
       %h2.vote-question= @question.attributes['name']
-  %ul.votebox.answers.row-fluid.unstyled.intro-popover{"data-title" => "Users can vote by clicking one of these options", "data-trigger" => "manual", "data-placement" => "bottom"}
+  %ul.votebox.answers.row-fluid.unstyled.intro-popover{"data-title" => "You can vote by clicking on one of these options. When you click, new options will appear. You can vote as many times as you want.", "data-trigger" => "manual", "data-placement" => "bottom"}
     %li.span5.offset1.leftside
       %div
         = render(:partial => 'questions/idea', :locals => {:data => @left_choice_title, :side => "leftside", :choice_id => @left_choice_id})
