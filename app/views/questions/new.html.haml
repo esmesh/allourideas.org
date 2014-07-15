@@ -10,7 +10,7 @@
       %p
         = ( "#{t('questions.new.if_you_have_an_account')} " + link_to(t('questions.new.here'), sign_in_path) + '.')
     .left.create-question
-      -form_for :question, @question, :url => questions_path, :html => {:id => 'new_question_form'} do |f|
+      -form_for :question, @question, :url => questions_path, :html => {:id => 'new_question_form', :multipart => true } do |f|
         %p
           = f.error_messages :header_message => "#{@question.errors.length} #{t('questions.new.error.header')}"
           - if @user && @user.errors.any?
@@ -40,8 +40,7 @@
               %label.add-on{:for => "question_url"} http://aoi.casci.rit.edu/
               = f.text_field 'url', :class => 'required span4', :placeholder => (@question && @question.url) || t('questions.new.step2_exp')
             = hidden_field_tag 'default_text2', t('questions.new.step2_exp')
-            
-
+        
         %fieldset#step3
           %legend= t('questions.new.step3')
           .control-group
@@ -53,6 +52,13 @@
             .controls
               = f.text_area 'ideas', :class => 'required span8', :cols => 85, :rows => 12, :placeholder => t('questions.new.step3_exp')
           = hidden_field_tag 'default_text3', t('questions.new.step3_exp')
+          
+          .control-group
+            %label.control-label{:for => "question_upload"}
+              = t('questions.new.step3_upload')
+            
+            .controls
+              = f.file_field 'upload', :class => 'required span8'
     
         -unless signed_in?
           

@@ -45,7 +45,6 @@ class EarlsController < ApplicationController
        # we can probably make this into one api call
        @prompt = Prompt.find(@question.attributes['picked_prompt_id'], :params => {:question_id => @question.id})
        
-       puts "PROMPTTTT"
        puts @prompt
        
        @right_choice_title = @prompt.right_choice_title

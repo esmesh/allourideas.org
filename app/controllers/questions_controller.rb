@@ -1,3 +1,5 @@
+require 'pry'
+require 'roo'
 class QuestionsController < ApplicationController
   include ActionView::Helpers::TextHelper
   require 'crack'
@@ -1073,9 +1075,33 @@ class QuestionsController < ApplicationController
     logger.info("!!!!!")
     logger.info("API Info site: #{APP_CONFIG[:API_HOST]}, user: #{APP_CONFIG[:PAIRWISE_USERNAME]}, password: #{APP_CONFIG[:PAIRWISE_PASSWORD]}")
     logger.info("!!!!!")
+    
+    #TODO: do the file saving/opening in fewer lines
+    #TODO: better algorithm for the file name
+    if !params['question']['upload'].nil?
+      uploaded_file = params['question']['upload']
+      file = File.new(params['question']['url'] + ".xls", "wb")
+      file.close
+      File.open(params['question']['url'] + ".xls", "rb+") { |f| f.write(uploaded_file.read)}
+      file = File.open(params['question']['url'] + ".xls", "r")
+      
+      wb = Roo::Excel.new(params['question']['url'] + ".xls")
+      wb.default_sheet = wb.sheets.first
+      
+      ideas_from_file = "";
+      wb.each do
+        |row| ideas_from_file = ideas_from_file + row[0] + ": " + row[1] + "\r" + "\n" 
+      end
+      
+      params[:question][:ideas] = ideas_from_file
+      
+      File.delete(params['question']['url'] + ".xls")
+    end
+    
     logger.info("questions_controller::create 1")
-    logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url)}"
-    @question = Question.new(params[:question].slice(:name, :ideas, :url))
+    logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url, :upload)}"
+    #CATH: this is the object that is sent to the api somehow
+    @question = Question.new(params[:question].slice(:name, :ideas, :url, :upload))
     logger.info("Created new question!")
     logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
