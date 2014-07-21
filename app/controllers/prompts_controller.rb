@@ -1,21 +1,22 @@
 # encoding: utf-8
+require 'pry'
 class PromptsController < ApplicationController
   include ActionView::Helpers::TextHelper
 
-  def vote    
+  def vote
     bingo!("voted")
     voted_prompt = Prompt.new
     voted_prompt.id = params[:id]
     voted_prompt.prefix_options = {:question_id => params[:question_id]}
     session[:has_voted] = true
-
+    
+    
     @earl = Earl.find_by_question_id(params[:question_id])
     if params[:direction] &&
       vote = voted_prompt.post(:vote,
         :question_id => params[:question_id],
           :vote => get_object_request_options(params, :vote),
-          :next_prompt => get_next_prompt_options
-        
+          :next_prompt => get_next_prompt_options  
       )
 
       next_prompt = Hash.from_xml(vote.body)['prompt']
@@ -189,7 +190,9 @@ class PromptsController < ApplicationController
      options = { :visitor_identifier => @survey_session.session_id,
                  # use static value of 5 if in test, so we can mock resulting API queries
                  :time_viewed => (Rails.env == 'test') ? 5 : params[:time_viewed],
-                 :appearance_lookup => params[:appearance_lookup]
+                 :appearance_lookup => params[:appearance_lookup],
+                 #CATH: this is to send the voter's user id to the API
+                 :site_user_id => current_user.id 
      }
     if @survey_session.old_session_id
       options.merge!({:old_visitor_identifier => @survey_session.old_session_id})
