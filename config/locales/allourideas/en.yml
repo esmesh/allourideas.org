@@ -170,6 +170,7 @@ en:
     owner_password_exp: The owner of this wiki survey has made it password protected. Please contact the owner to get the username and password you will need in order to participate.
   vote:
     add_your_idea: Add your own idea here...
+    add_your_idea_title: Add a title for your idea...
     add_your_idea_button: Add your own idea
     cast_votes: Cast Votes
     you_chose_winner_over_loser: You chose %{winner} over %{loser}

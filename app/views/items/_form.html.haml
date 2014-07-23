@@ -2,9 +2,12 @@
 
   #the_add_box
     - box_text = t('vote.add_your_idea')
+    - box_title_text = t('vote.add_your_idea_title')
     .alert.alert-success.idea-success.hide
       %a.close{:type => 'button', :"data-dismiss" => 'alert'} &times;
       %p
+    %p.add-idea
+      %input#new_idea_title_field.new_idea_title_field{:placeholder => box_title_text, :maxlength => Const::MAX_ITEM_LENGTH, :name => 'new_idea_title', "data-title" => "Add a title for your idea", "data-placement" => "bottom", "data-trigger" => "manual"}
     %p.add-idea
       %textarea#new_idea_field.new_idea_field.intro-popover{:placeholder => box_text, :maxlength => Const::MAX_ITEM_LENGTH, :rows => 2, :name => 'new_idea', "data-title" => "You can add your own ideas here", "data-placement" => "bottom", "data-trigger" => "manual"}
     = hidden_field_tag 'default_text', box_text

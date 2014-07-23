@@ -949,6 +949,7 @@ class QuestionsController < ApplicationController
 
   def add_idea
     bingo!('submitted_idea')
+    new_idea_title = params[:new_idea_title]
     new_idea_data = params[:new_idea]
 
     if @photocracy
@@ -966,7 +967,8 @@ class QuestionsController < ApplicationController
     end
 
     choice_params = {:visitor_identifier => @survey_session.session_id,
-      :data => new_idea_data, 
+      :data => new_idea_data,
+      :title => new_idea_title,
       :question_id => params[:id]}
 
     choice_params.merge!(:local_identifier => current_user.id) if signed_in?
