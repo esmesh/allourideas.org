@@ -48,7 +48,8 @@ class ApplicationController < ActionController::Base
 
   helper_method :show_aoi_nav?
   def show_aoi_nav?
-    return !white_label_request? && (controller_name == 'home' || (controller_name == 'questions' && action_name == 'new'))
+    return true
+    #!white_label_request? && (controller_name == 'home' || (controller_name == 'questions' && action_name == 'new'))
   end
 
   # called when the request is not verified via the authenticity_token

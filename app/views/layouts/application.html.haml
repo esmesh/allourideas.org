@@ -73,7 +73,10 @@
                 = link_to(t('nav.create'), new_question_path)
               %li{:class => current_page?(about_path) ? 'active' : nil}
                 = link_to(t('nav.about'), about_path)
-              %li= link_to(t('nav.blog'), "http://blog.allourideas.org")
+              - if "#{request.url}".include?('guides=true')
+                %li= link_to(t('nav.guides'), "#{request.url}" )
+              -else
+                %li= link_to(t('nav.guides'), "#{request.url}?guides=true" )
           %ul.nav.pull-right
             - if signed_in?
               %li.dropdown
