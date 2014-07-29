@@ -359,7 +359,9 @@ class QuestionsController < ApplicationController
     end
   end
 
-
+  def template_file
+    send_file 'template.xls', :type=>"application/vnd.ms-excel", :x_sendfile=>true
+  end
 
   def voter_map
     logger.info "@question = Question.find_by_name(#{params[:id]}) ..."
@@ -1092,7 +1094,7 @@ class QuestionsController < ApplicationController
       
       ideas_from_file = "";
       wb.each do
-        |row| ideas_from_file = ideas_from_file + row[0] + ": " + row[1] + "\r" + "\n" 
+        |row| ideas_from_file = ideas_from_file + row[0] + ": " + row[1] + "\r" + "\n" unless wb.cell(1,1) == row[0] and wb.cell(1,2) == row[1]
       end
       
       params[:question][:ideas] = ideas_from_file
