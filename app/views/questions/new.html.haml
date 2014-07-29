@@ -43,19 +43,12 @@
         
         %fieldset#step3
           %legend= t('questions.new.step3')
-          .control-group
-            %label.control-label{:for => "question_ideas"}
-              = t('questions.new.step3_ist')
-              = t('questions.new.step3_ist2')
-              == #{t('questions.new.step3_ist3')} #{Const::MAX_ITEM_LENGTH} #{t('common.characters')}.
-    
-            .controls
-              = f.text_area 'ideas', :class => 'required span8', :cols => 85, :rows => 12, :placeholder => t('questions.new.step3_exp')
-          = hidden_field_tag 'default_text3', t('questions.new.step3_exp')
+          
           
           .control-group
             %label.control-label{:for => "question_upload"}
               = t('questions.new.step3_upload')
+              = link_to(t('questions.new.step3_template'), "/template.xls")
             
             .controls
               = f.file_field 'upload', :class => 'required span8'
