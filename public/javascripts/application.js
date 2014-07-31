@@ -178,6 +178,23 @@ function iframe_loaded(){
           $('.voter_map_indicator').hide();
 }
 
+function on_choice_update(ev){
+	var form = ev.parentNode;
+	
+	var choice_id = form.elements.choice_id.value;
+	var question_id = form.elements.question_id.value;
+	var choice_title = form.elements.choice_title.value;
+	var choice_data = form.elements.choice_data.value;
+	
+	var postData = {authenticity_token: AUTH_TOKEN, choice_id: choice_id, question_id: question_id, choice_title: choice_title, choice_data:choice_data };
+	$.post('/questions/' + question_id + '/choices/'  + choice_id + '/update.js', postData,
+	       function(data){
+		$('#'+ choice_id).html(data.title);
+		debugger;
+	       }, "json");
+	
+    }
+
 jQuery(document).ready(function() {
 	
 	//$('label').labelOver('over-apply');
@@ -214,7 +231,7 @@ jQuery(document).ready(function() {
         $(this).css("border-right", "1px solid #3198c1");
       });
     });});
-
+  
 	$('.toggle_question_status').bind('click',function(ev){
 		$.blockUI({ message: null, fadeIn: 0, fadeOut:  0, overlayCSS:  { 
 		        backgroundColor: '#000', 

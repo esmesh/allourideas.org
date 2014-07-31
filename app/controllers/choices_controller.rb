@@ -1,7 +1,8 @@
+require 'pry'
 class ChoicesController < ApplicationController
   include ActionView::Helpers::TextHelper
   before_filter :authenticate, :only => [:toggle]
-  before_filter :earl_owner_or_admin_only, :only => [:activate, :deactivate, :rotate]
+  before_filter :earl_owner_or_admin_only, :only => [:activate, :deactivate, :rotate, :update]
 
   def show
     @earl = Earl.find params[:question_id]
@@ -55,6 +56,25 @@ class ChoicesController < ApplicationController
           render :json => {:verb => verb[!@choice.active?], :active => !@choice.active?}.to_json
         end
         }
+    end
+  end
+  
+  def update
+    @choice = Choice.find(params[:choice_id], :params => {:question_id => params[:question_id]})
+    old_title = @choice.title
+    @choice.title = params[:choice_title]
+    @choice.data = params[:choice_data]
+    
+    respond_to do |format|
+      format.xml { head :ok}
+      format.js {
+	
+	if @choice.save
+	  render :json => {:title => @choice.title}.to_json
+	else
+	  render :json => {:title => old_title}.to_json
+	end
+      }
     end
   end
   
