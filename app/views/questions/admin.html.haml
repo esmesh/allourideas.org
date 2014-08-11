@@ -9,6 +9,10 @@
         %h3= t('nav.manage_question')
         #question-saved.alert.alert-success.hide
           = t('questions.question_saved')
+        %input{ :id => "filter_text", :name => "filter_text", :type=> 'text' }
+        %button.btn{:class => 'btn-primary', :type => "button", :onclick => "on_choice_update(this)"}
+          = "Filter"
+        %input#question_id{ :type => "hidden", :value => @question.attributes['id']}
         %table.table.table-bordered.table-striped.table-condensed.tablesorter.ideas-table
           %thead 
             %tr
@@ -26,9 +30,10 @@
               %th.score= t('items.list.status').titleize
           %tbody 
             -for choice in @choices #.sort_by {|x| [(!!x.attributes['active']).to_s, x.data]}
-              %tr
-                %td.title= link_to h(truncate(choice.title, :length => 140, :omission => '…')), question_choice_url(@earl.name, choice), :id => choice.id, :question_id => @earl.name, :"data-toggle" => "modal-ajax"
-                %td.votes= choice.attributes['score'].round.to_s
+              %tr{"data-choice-admin-stats" => '/questions/' + choice.question_id.to_s + '/choices/' + choice.id.to_s + '/admin_stats.json', :id => choice.id, :name=> choice.id }
+                %td.title= link_to h(truncate(choice.title, :length => 140, :omission => '…')), question_choice_url(@earl.name, choice), :question_id => @earl.name, :"data-toggle" => "modal-ajax"
+                %td.votes{"data-choice-stats-key" => "score"}
+                  = image_tag('ajax-loader.gif')
                 %td.votes= choice.attributes['user_created'] ? t('admin.user') : t('admin.seed')
                 %td.votes{:id => "choice_#{choice.id}_status"}
                   -if @choices.size < 3

@@ -1,11 +1,13 @@
 ActionController::Routing::Routes.draw do |map|
   map.resource :session, :controller => "clearance/sessions", :only => [:new, :create, :destroy]
-  map.resource :users, :controller => "clearance/users", :only => [:new, :create]
+  map.resource :users, :controller => "clearance/users", :only => [:new]
+  map.resource :users, :controller => "users", :only => [:create]
   map.signup '/sign_up', :controller => "clearance/users", :action => :new
   map.signin '/sign_in', :controller => "clearance/sessions", :action => :new
   map.signout '/sign_out', :controller => "clearance/sessions", :action => :destroy
   map.resource :passwords, :controller => "clearance/passwords"
-
+  map.resource :choices, :controller => "choices"
+  
   map.resources :questions,
     :collection => {
     },
@@ -31,9 +33,9 @@ ActionController::Routing::Routes.draw do |map|
 		  :only => [:show, :votes],
 		  :member => {
 		  	:activate => :get, # these shouldn't be get requests, but they need to work in email
-        :deactivate => :get,
-        :rotate => :post,
-        :votes => :get
+			:deactivate => :get,
+			:rotate => :post,
+			:votes => :get
 		  },
 		  :path_prefix => '/:question_id'
 	  end
@@ -42,7 +44,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :clicks, :collection => {:export=> :get}
   #map.connect '/questions/:question_id/choices/:id', :controller => 'choices', :action => 'show'
   map.toggle_choice_status '/questions/:earl_id/choices/:id/toggle.:format', :controller => 'choices', :action => 'toggle', :conditions => { :method => :post }
-  
+  map.connect '/questions/:question_id/choices/:id/update.:format', :controller => 'choices', :action => 'update', :conditions => { :method => :post }
+  map.connect '/questions/:question_id/choices/:id/admin_stats.:format', :controller => 'choices', :action => 'admin_stats', :conditions => { :method => :post }
   map.cookies_blocked '/cookies_blocked.gif', :controller => 'home', :action => 'cookies_blocked'
   map.about '/about', :controller => 'home', :action => 'about'
   map.admin '/admin', :controller => 'home', :action => 'admin'

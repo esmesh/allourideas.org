@@ -36,6 +36,19 @@ class ChoicesController < ApplicationController
     end
   end
   
+  def admin_stats
+    users = User.all(:conditions => params[:filters])
+    choice = Choice.find(params[:choice_id], :params => {:question_id => params[:question_id], :choice_id => params[:choice_id], :users => users})
+    response = {
+      "score" => choice.get("dynamic_score", :users => users, :choice_id => params[:choice_id], :question_id => params[:question_id])
+    }
+    
+    respond_to do |format|
+      format.json { render :json => response.to_json }
+    end
+  end
+  
+  
   def toggle
     @earl = Earl.find(params[:earl_id])
     unless (current_user.owns?(@earl) || current_user.admin?)

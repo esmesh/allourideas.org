@@ -78,6 +78,7 @@ AOI.admin = (function($) {
     that.initialize = function() {
         editQuestion();
         loadStats();
+	loadChoiceStats();
     };
 
     function loadStats() {
@@ -95,6 +96,38 @@ AOI.admin = (function($) {
             });
             ajax.error(function() {
                 el.find('[data-stats-key]').each(function(i, col) {
+                    $(col).html('<span class="label label-important">Error</span>');
+                });
+                getNext(items);
+            });
+        }
+    }
+    
+    function filterResults(){
+	var filter = $("filter_text").html();
+	debugger;
+    }
+    
+    function loadChoiceStats() {	
+        var items = $('[data-choice-admin-stats]').toArray();
+        getNext(items);
+        function getNext(items) {
+            if (items.length < 1) { return; }
+            var el = $(items.shift());
+	    debugger;
+	    var choice_id = el.attr('id');
+	    var question_id = $("#question_id").val()
+ 	    var postData = {authenticity_token: AUTH_TOKEN, choice_id: choice_id, question_id: question_id};
+	        
+            var ajax = $.post(el.data('choice-admin-stats'), postData);
+            ajax.success(function(data) {
+                el.find('[data-choice-stats-key]').each(function(i, col) {
+                    $(col).html(data[$(col).data('choice-stats-key')].value);
+                });
+                getNext(items);
+            });
+            ajax.error(function() {
+                el.find('[data-choice-stats-key]').each(function(i, col) {
                     $(col).html('<span class="label label-important">Error</span>');
                 });
                 getNext(items);
