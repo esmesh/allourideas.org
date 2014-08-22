@@ -9,7 +9,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130627190740) do
+ActiveRecord::Schema.define(:version => 20140822141859) do
+
+  create_table "ages", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "range"
+  end
 
   create_table "alternatives", :force => true do |t|
     t.integer "experiment_id"
@@ -51,6 +57,18 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
 
   add_index "clicks", ["session_info_id"], :name => "index_clicks_on_session_info_id"
 
+  create_table "computational_resources", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  create_table "countries", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0
@@ -88,6 +106,18 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
 
   add_index "earls", ["question_id"], :name => "index_earls_on_question_id"
 
+  create_table "education_levels", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  create_table "experience_years", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "range"
+  end
+
   create_table "experiments", :force => true do |t|
     t.string   "test_name"
     t.string   "status"
@@ -107,6 +137,12 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
 
   add_index "exports", ["name"], :name => "index_exports_on_name"
 
+  create_table "organization_types", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
   create_table "photos", :force => true do |t|
     t.string   "image_file_name",    :default => ""
     t.string   "image_content_type", :default => ""
@@ -116,6 +152,12 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
     t.datetime "updated_at"
     t.integer  "rotation",           :default => 0
     t.string   "original_file_name"
+  end
+
+  create_table "programming_languages", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
   end
 
   create_table "session_infos", :force => true do |t|
@@ -145,6 +187,23 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
   add_index "slugs", ["name", "sluggable_type", "scope", "sequence"], :name => "index_slugs_on_n_s_s_and_s", :unique => true
   add_index "slugs", ["sluggable_id"], :name => "index_slugs_on_sluggable_id"
 
+  create_table "software_hours", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "range"
+  end
+
+  create_table "team_sizes", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "range"
+  end
+
+  create_table "tool_types", :force => true do |t|
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "trials", :force => true do |t|
     t.integer  "session_info_id"
     t.integer  "alternative_id"
@@ -152,17 +211,35 @@ ActiveRecord::Schema.define(:version => 20130627190740) do
     t.datetime "updated_at"
   end
 
+  create_table "user_programming_languages", :force => true do |t|
+    t.integer "user_id"
+    t.integer "programming_language_id"
+  end
+
   create_table "users", :force => true do |t|
     t.string   "email"
-    t.string   "encrypted_password", :limit => 128
-    t.string   "salt",               :limit => 128
-    t.string   "confirmation_token", :limit => 128
-    t.string   "remember_token",     :limit => 128
-    t.boolean  "email_confirmed",                   :default => false, :null => false
+    t.string   "encrypted_password",           :limit => 128
+    t.string   "salt",                         :limit => 128
+    t.string   "confirmation_token",           :limit => 128
+    t.string   "remember_token",               :limit => 128
+    t.boolean  "email_confirmed",                             :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "default",                           :default => false
-    t.boolean  "admin",                             :default => false
+    t.boolean  "default",                                     :default => false
+    t.boolean  "admin",                                       :default => false
+    t.integer  "age_id"
+    t.integer  "country_id"
+    t.integer  "education_level_id"
+    t.string   "education_field"
+    t.integer  "software_experience_years_id"
+    t.integer  "domain_experience_years_id"
+    t.integer  "organization_type_id"
+    t.string   "position"
+    t.string   "institution"
+    t.integer  "computational_resources_id"
+    t.integer  "hours_using_software_id"
+    t.integer  "hours_developing_software_id"
+    t.integer  "team_size_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"

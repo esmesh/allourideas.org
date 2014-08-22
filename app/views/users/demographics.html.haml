@@ -1,0 +1,109 @@
+.row.fluid
+  .span12
+    %h2= t('demographics.new.header')
+    
+    - if !logged_in?
+      %p
+        = ( "#{t('questions.new.if_you_have_an_account')} " + link_to(t('questions.new.here'), sign_in_path) + '.')
+    .left.create-question
+      -form_for :user, @user, :url => "/users/update", :html => {:id => 'update_demographics_form'} do |f|
+        %p
+          = f.error_messages :header_message => "#{@user.errors.length} #{t('demographics.new.error.header')}"
+        
+        .control-group
+          %label.control-label{:for => 'user_age_id'}
+            = "Age:"
+          .controls
+            = f.select "age_id", @ages.collect { |a| [a.range, a.id] }, { include_blank: true, :selected => @user.age_id}
+        
+        .control-group
+          %label.control-label{:for => 'user_country_id'}
+            = "Country of Residence:"
+          .controls
+            = f.select "country_id", @countries.collect { |c| [c.name, c.id] }, { include_blank: true, :selected => @user.country_id}
+        
+        .control-group
+          %label.control-label{:for => 'user_education_level_id'}
+            = "Highest level of education:"
+          .controls
+            = f.select "education_level_id", @education_levels.collect { |c| [c.name, c.id] }, { include_blank: true, :selected => @user.education_level_id}
+        
+        .control-group
+          %label.control-label{:for => 'education_field'}
+            = "Field in which education was completed:"
+          .controls
+            = f.text_field 'education_field', :value => @user.education_field
+              
+        .control-group
+          %label.control-label{:for => 'software_experience_years_id'}
+            = "Years of experience with software development:"
+          .controls
+            = f.select "software_experience_years_id", @experience_years.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.software_experience_years_id}
+        
+        .control-group
+          %label.control-label{:for => 'domain_experience_years_id'}
+            = "Years of experience with domain:"
+          .controls
+            = f.select "domain_experience_years_id", @experience_years.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.domain_experience_years_id}
+
+        .control-group
+          %label.control-label{:for => 'organization_type_id'}
+            = "Organization type:"
+          .controls
+            = f.select "organization_type_id", @organization_types.collect { |c| [c.name, c.id] }, { include_blank: true, :selected => @user.organization_type_id}
+        
+        .control-group
+          %label.control-label{:for => 'position'}
+            = "Position:"
+          .controls
+            = f.text_field 'position', :value => @user.position
+            
+        .control-group
+          %label.control-label{:for => 'institution'}
+            = "Institution:"
+          .controls
+            = f.text_field 'institution', :value => @user.institution
+            
+        .control-group
+          %label.control-label{:for => 'computational_resources_id'}
+            = "Computational resources used:"
+          .controls
+            = f.select "computational_resources_id", @computational_resources.collect { |c| [c.name, c.id] }, { include_blank: true, :selected => @user.computational_resources_id}
+  
+        .control-group
+          %label.control-label{:for => 'hours_using_software_id'}
+            = "Hours a week using software:"
+          .controls
+            = f.select "hours_using_software_id", @software_hours.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.hours_using_software_id}
+
+        .control-group
+          %label.control-label{:for => 'hours_developing_software_id'}
+            = "Hours a week developing software:"
+          .controls
+            = f.select "hours_developing_software_id", @software_hours.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.hours_developing_software_id}
+            
+        .control-group
+          %label.control-label{:for => 'programming_language_ids'}
+            = "Programming languages used:"
+          .controls
+            = f.select "programming_language_ids", @programming_languages.collect { |c| [c.name, c.id] }, { :prompt => "Please select", :selected => @user.programming_language_ids}, { :multiple => true }
+
+        .control-group
+          %label.control-label{:for => 'team_size_id'}
+            = "Development team size:"
+          .controls
+            = f.select "team_size_id", @team_sizes.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.team_size_id}
+
+  
+        .form-actions
+          %button#question_create_button.btn.btn-large.btn-primary{:type => "submit"}
+            = "Update"
+        
+    
+    #indicator.indicator{:style => "display:none;"}= image_tag('indicator.gif')
+
+-content_for :view_javascript do
+  :plain
+    $('#new_question_form').submit(function(){
+      $('#indicator').show();
+    });

@@ -115,6 +115,11 @@ en:
     deny_access_error: You must be logged in to perform this action
     not_authorized_error: You do not have permission to modify this question
     not_authorized_to_create_error: You do not have permission to create questions
+  demographics:
+    new:
+      header: Tell us about you...
+      error:
+        header: errors prohibited this website from being created.
   questions:
     new:
       error:

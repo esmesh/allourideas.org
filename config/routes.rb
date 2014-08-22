@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   map.signout '/sign_out', :controller => "clearance/sessions", :action => :destroy
   map.resource :passwords, :controller => "clearance/passwords"
   map.resource :choices, :controller => "choices"
+  map.connect 'users/demographics', :controller => 'users', :action => 'demographics'
+  map.connect 'users/update', :controller => 'users', :action => 'update'
   
   map.resources :questions,
     :collection => {
