@@ -19,8 +19,10 @@ class UsersController < Clearance::UsersController
     @education_levels = EducationLevel.all
     @experience_years = ExperienceYears.all
     @organization_types = OrganizationType.all
+    @field_of_studies = FieldOfStudy.all
     @computational_resources = ComputationalResources.all
     @software_hours = SoftwareHours.all
+    @number_of_users = NumberOfUsers.all
     @programming_languages = ProgrammingLanguage.all
     @team_sizes = TeamSize.all
   end
@@ -35,9 +37,11 @@ class UsersController < Clearance::UsersController
     current_user.organization_type_id = params[:user][:organization_type_id]
     current_user.position = params[:user][:position]
     current_user.institution = params[:user][:institution]
+    current_user.field_of_studies_id = params[:user][:field_of_studies_id]
     current_user.computational_resources_id = params[:user][:computational_resources_id]
     current_user.hours_using_software_id = params[:user][:hours_using_software_id]
     current_user.hours_developing_software_id = params[:user][:hours_developing_software_id]
+    current_user.number_of_users_id = params[:user][:number_of_users_id]
     current_user.team_size_id = params[:user][:team_size_id]
     current_user.programming_language_ids = params[:user][:programming_language_ids]
     
@@ -51,8 +55,10 @@ class UsersController < Clearance::UsersController
     @education_levels = EducationLevel.all
     @experience_years = ExperienceYears.all
     @organization_types = OrganizationType.all
+    @field_of_studies = FieldOfStudy.all
     @computational_resources = ComputationalResources.all
     @software_hours = SoftwareHours.all
+    @number_of_users = NumberOfUsers.all
     @programming_languages = ProgrammingLanguage.all
     @team_sizes = TeamSize.all
     

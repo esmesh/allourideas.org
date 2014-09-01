@@ -63,7 +63,13 @@
             = "Institution:"
           .controls
             = f.text_field 'institution', :value => @user.institution
-            
+        
+        .control-group
+          %label.control-label{:for => 'field_of_studies_id'}
+            = "Field of Study:"
+          .controls
+            = f.select "field_of_studies_id", @field_of_studies.collect { |c| [c.name, c.id] }, { include_blank: true, :selected => @user.field_of_studies_id}
+    
         .control-group
           %label.control-label{:for => 'computational_resources_id'}
             = "Computational resources used:"
@@ -81,7 +87,13 @@
             = "Hours a week developing software:"
           .controls
             = f.select "hours_developing_software_id", @software_hours.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.hours_developing_software_id}
-            
+        
+        .control-group
+          %label.control-label{:for => 'number_of_users_id'}
+            = "Number of other users of scientific software:"
+          .controls
+            = f.select "number_of_users_id", @number_of_users.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.number_of_users_id}
+    
         .control-group
           %label.control-label{:for => 'programming_language_ids'}
             = "Programming languages used:"
@@ -93,7 +105,6 @@
             = "Development team size:"
           .controls
             = f.select "team_size_id", @team_sizes.collect { |c| [c.range, c.id] }, { include_blank: true, :selected => @user.team_size_id}
-
   
         .form-actions
           %button#question_create_button.btn.btn-large.btn-primary{:type => "submit"}
