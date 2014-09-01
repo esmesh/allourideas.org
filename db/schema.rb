@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140822141859) do
+ActiveRecord::Schema.define(:version => 20140828214907) do
 
   create_table "ages", :force => true do |t|
     t.datetime "created_at"
@@ -137,6 +137,14 @@ ActiveRecord::Schema.define(:version => 20140822141859) do
 
   add_index "exports", ["name"], :name => "index_exports_on_name"
 
+  create_table "field_of_studies", :force => true do |t|
+    t.string "name"
+  end
+
+  create_table "number_of_users", :force => true do |t|
+    t.string "range"
+  end
+
   create_table "organization_types", :force => true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -240,6 +248,8 @@ ActiveRecord::Schema.define(:version => 20140822141859) do
     t.integer  "hours_using_software_id"
     t.integer  "hours_developing_software_id"
     t.integer  "team_size_id"
+    t.integer  "number_of_users_id"
+    t.integer  "field_of_studies_id"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email"
