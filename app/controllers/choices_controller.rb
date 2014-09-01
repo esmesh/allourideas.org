@@ -37,6 +37,14 @@ class ChoicesController < ApplicationController
   end
   
   def admin_stats
+    if params[:programming_languages_ids] and params[:programming_languages_ids].empty? == false
+      langs = UserProgrammingLanguages.all.select {|a| params[:programming_languages_ids].include?(a.programming_language_id.to_s)}
+      langs_ids = langs.collect(&:programming_language_id)
+      if params[:filters].nil?
+	params[:filters] = Hash.new {}
+      end
+      params[:filters][:id] = langs_ids  
+    end    
     users = User.all(:conditions => params[:filters])
     choice = Choice.find(params[:choice_id], :params => {:question_id => params[:question_id], :choice_id => params[:choice_id], :users => users})
     response = {

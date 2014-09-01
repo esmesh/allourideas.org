@@ -290,9 +290,19 @@ class QuestionsController < ApplicationController
 
     @question = @earl.question
     @partial_results_url = "#{@earl.name}/results"
-
     @choices = Choice.find(:all, :params => {:question_id => @question.id, :include_inactive => true})
-
+    @ages = Age.all
+    @countries = Country.all
+    @education_levels = EducationLevel.all
+    @experience_years = ExperienceYears.all
+    @organization_types = OrganizationType.all
+    @field_of_studies = FieldOfStudy.all
+    @computational_resources = ComputationalResources.all
+    @software_hours = SoftwareHours.all
+    @number_of_users = NumberOfUsers.all
+    @programming_languages = ProgrammingLanguage.all
+    @team_sizes = TeamSize.all
+    
   end
 
   def word_cloud

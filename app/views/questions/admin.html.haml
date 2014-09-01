@@ -9,9 +9,7 @@
         %h3= t('nav.manage_question')
         #question-saved.alert.alert-success.hide
           = t('questions.question_saved')
-        %input{ :id => "filter_text", :name => "filter_text", :type=> 'text' }
-        %button.btn{:class => 'btn-primary', :type => "button", :onclick => "on_choice_update(this)"}
-          = "Filter"
+        = link_to("Filter", '#filter-score', :"data-toggle" => 'modal', :class => 'btn')
         %input#question_id{ :type => "hidden", :value => @question.attributes['id']}
         %table.table.table-bordered.table-striped.table-condensed.tablesorter.ideas-table
           %thead 
@@ -125,6 +123,70 @@
               = t('admin.list_of_non_votes_csv')
             .span2
               = link_to(t('admin.request'), {:action => :export, :params => {:type => :non_votes}}, :"data-toggle" => 'modal-ajax', :class => "btn btn-primary")
+  
+  #filter-score.modal.hide.fade
+    .modal-header
+      %button.close{:"data-dismiss" => 'modal'} x
+      %h2= "Select the values you want to filter scores by"
+    .modal-body
+      %select#age_id
+        %option{:value => "" } "Age..."
+        - @ages.each do |a|
+          %option{:value => a.id}= a.range
+      %select#country_id
+        %option{:value => "" } "Country..."
+        - @countries.each do |a|
+          %option{:value => a.id}= a.name
+      %select#education_level_id
+        %option{:value => "" } "Education level..."
+        - @education_levels.each do |a|
+          %option{:value => a.id}= a.name
+      %input#education_field{:placeholder => "Education field..."}
+      %select#software_experience_years_id
+        %option{:value => "" } "Years developing software..."
+        - @experience_years.each do |a|
+          %option{:value => a.id}= a.range
+      %select#domain_experience_years_id
+        %option{:value => "" } "Years in domain..."
+        - @experience_years.each do |a|
+          %option{:value => a.id}= a.range
+      %select#organization_type_id
+        %option{:value => "" } "Organization type..."
+        - @organization_types.each do |a|
+          %option{:value => a.id}= a.name
+      %input#position{:placeholder => "Position..."}
+      %input#institution{:placeholder => "Institution..."}
+      %select#field_of_studies_id
+        %option{:value => "" } "Field of study..."
+        - @field_of_studies.each do |a|
+          %option{:value => a.id}= a.name
+      %select#computational_resources_id
+        %option{:value => "" } "Computational resources..."
+        - @computational_resources.each do |a|
+          %option{:value => a.id}= a.name
+      %select#hours_using_software_id
+        %option{:value => "" } "Hours a week using sw.."
+        - @software_hours.each do |a|
+          %option{:value => a.id}= a.range
+      %select#hours_developing_software_id
+        %option{:value => "" } "Hours a week developing sw..."
+        - @software_hours.each do |a|
+          %option{:value => a.id}= a.range
+      %select#number_of_users_id
+        %option{:value => "" } "Number of users of my software..."
+        - @number_of_users.each do |a|
+          %option{:value => a.id}= a.range
+      %select#programming_languages_id{:multiple => true}
+        %option{:value => "" } "Programming languages..."
+        - @programming_languages.each do |a|
+          %option{:value => a.id}= a.name
+      %select#team_size_id
+        %option{:value => "" } "Team size..."
+        - @team_sizes.each do |a|
+          %option{:value => a.id}= a.range
+          
+      %button.btn{:class => 'btn-primary', :type => "button", :onclick => "filterResults();", :"data-dismiss" => 'modal'}
+        = "Filter"
         
   #cant-edit-question.modal.hide.fade
     .modal-body

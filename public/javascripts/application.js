@@ -78,8 +78,14 @@ AOI.admin = (function($) {
     that.initialize = function() {
         editQuestion();
         loadStats();
-	loadChoiceStats();
+	var filters = {}
+	var programming_languages_ids = "";
+	loadChoiceStats(filters, programming_languages_ids);
     };
+    
+    that.filter = function(filters, programming_languages_ids){
+	loadChoiceStats(filters, programming_languages_ids);
+    }
 
     function loadStats() {
         var items = $('[data-admin-stats]').toArray();
@@ -103,21 +109,15 @@ AOI.admin = (function($) {
         }
     }
     
-    function filterResults(){
-	var filter = $("filter_text").html();
-	debugger;
-    }
-    
-    function loadChoiceStats() {	
+    function loadChoiceStats(filters, programming_languages_ids) {
         var items = $('[data-choice-admin-stats]').toArray();
         getNext(items);
         function getNext(items) {
             if (items.length < 1) { return; }
             var el = $(items.shift());
-	    debugger;
 	    var choice_id = el.attr('id');
 	    var question_id = $("#question_id").val()
- 	    var postData = {authenticity_token: AUTH_TOKEN, choice_id: choice_id, question_id: question_id};
+ 	    var postData = {authenticity_token: AUTH_TOKEN, choice_id: choice_id, question_id: question_id, filters: filters, programming_languages_ids: programming_languages_ids};
 	        
             var ajax = $.post(el.data('choice-admin-stats'), postData);
             ajax.success(function(data) {
@@ -211,6 +211,77 @@ function iframe_loaded(){
           $('.voter_map_indicator').hide();
 }
 
+function filterResults(){
+	var age_id = $("#age_id").val();
+	var country_id = $("#country_id").val();
+	var education_level_id = $("#education_levels_id").val();
+	var education_field = $("#education_field").val();
+	var software_experience_years_id = $("#software_experience_years_id").val();
+	var domain_experience_years_id = $("#domain_experience_years_id").val();
+	var organization_type_id = $("#organization_type_id").val();
+	var position = $("#position").val();
+	var institution = $("#institution").val();
+	var field_of_studies_id = $("#field_of_studies_id").val();
+	var computational_resources_id = $("#computational_resources_id").val();
+	var hours_using_software_id = $("#hours_using_software_id").val();
+	var hours_developing_software_id = $("#hours_developing_software_id").val();
+	var number_of_users_id = $("#number_of_users_id").val();
+	var programming_languages_id = $("#programming_languages_id").val();
+	var team_size_id = $("#team_size_id").val();
+	
+	var filters = {};
+	
+	if(age_id != "") {
+	    filters.age_id = age_id;
+	}
+	if(country_id != "") {
+	    filters.country_id = country_id;
+	}
+	if(education_level_id != "") {
+	    filters.education_level_id = education_level_id;
+	}
+	if(education_field != "") {
+	    filters.education_field = education_field;
+	}
+	if(software_experience_years_id != "") {
+	    filters.software_experience_years_id = software_experience_years_id;
+	}
+	if(domain_experience_years_id != "") {
+	    filters.domain_experience_years_id = domain_experience_years_id;
+	}
+	if(organization_type_id != "") {
+	    filters.organization_type_id = organization_type_id;
+	}
+	if(position != "") {
+	    filters.position = position;
+	}
+	if(institution != "") {
+	    filters.institution = institution;
+	}
+	if(field_of_studies_id != "") {
+	    filters.field_of_studies_id = field_of_studies_id;
+	}
+	if(computational_resources_id != "") {
+	    filters.computational_resources_id = computational_resources_id;
+	}
+	if(hours_using_software_id != "") {
+	    filters.hours_using_software_id = hours_using_software_id;
+	}
+	if(hours_developing_software_id != "") {
+	    filters.hours_developing_software_id = hours_developing_software_id;
+	}
+	if(number_of_users_id != "") {
+	    filters.number_of_users_id = number_of_users_id;
+	}
+	if(programming_languages_id != "") {
+	    var programming_languages_ids = programming_languages_id;
+	}
+	if(team_size_id != "") {
+	    filters.team_size_id = team_size_id;
+	}
+	AOI.admin.filter(filters, programming_languages_ids);
+    }
+
 function on_choice_update(ev){
 	var form = ev.parentNode;
 	
@@ -223,7 +294,6 @@ function on_choice_update(ev){
 	$.post('/questions/' + question_id + '/choices/'  + choice_id + '/update.js', postData,
 	       function(data){
 		$('#'+ choice_id).html(data.title);
-		debugger;
 	       }, "json");
 	
     }
