@@ -13,10 +13,6 @@ GEM
       activesupport (= 2.3.18)
     activesupport (2.3.18)
     addressable (2.2.8)
-    airbrake (3.1.12)
-      activesupport
-      builder
-      json
     ambethia-smtp-tls (1.1.2)
     aws-s3 (0.6.2)
       builder
@@ -124,7 +120,6 @@ GEM
     multi_xml (0.5.3)
     mysql2 (0.2.18)
     net-ssh (2.2.2)
-    newrelic_rpm (3.7.3.204)
     nokogiri (1.5.5)
     paperclip (2.7.5)
       activerecord (>= 2.3.0)
@@ -207,7 +202,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   ambethia-smtp-tls (= 1.1.2)
   aws-s3 (= 0.6.2)
   aws-sdk (~> 1.5.0)
@@ -238,7 +232,6 @@ DEPENDENCIES
   mime-types (= 1.16)
   multi_json (= 1.0.4)
   mysql2 (= 0.2.18)
-  newrelic_rpm
   paperclip (~> 2.7.0)
   pickle (~> 0.4.7)
   poltergeist (~> 1.0.1)

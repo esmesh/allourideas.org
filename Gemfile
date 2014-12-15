@@ -9,7 +9,6 @@ gem "rails", "2.3.18"
 gem "rake", "~> 0.9.0"
 gem "multi_json", "1.0.4"
 gem "json"
-gem "airbrake", :require => 'airbrake/rails'
 gem 'libxml-ruby', :require => "libxml"
 gem "ambethia-smtp-tls", "1.1.2", :require => "smtp-tls"
 gem "paperclip", "~> 2.7.0"
@@ -67,4 +66,3 @@ group :test, :cucumber do
   gem "jferris-mocha", "0.9.5.0.1241126838", :require => "mocha"
 end
 gem "ey_config"
-gem "newrelic_rpm"

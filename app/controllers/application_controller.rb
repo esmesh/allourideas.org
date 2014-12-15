@@ -15,6 +15,7 @@ class ApplicationController < ActionController::Base
   @@widget_view_path = ActionView::Base.process_view_paths(File.join(Rails.root, "app", "views", "widget")) 
 
   def view_filter
+    logger.info "view filter - db password is #{ENV['SQL_DB_PASSWORD']}"
     if request.url.include?('photocracy') || request.url.include?('fotocracy') || @photocracy || (RAILS_ENV == 'test' && $PHOTOCRACY)
       @photocracy = true
       prepend_view_path(@@photocracy_view_path)
@@ -26,10 +27,12 @@ class ApplicationController < ActionController::Base
   end
 
   def set_pairwise_credentials
+    logger.info "set pw creds - db password is #{ENV['SQL_DB_PASSWORD']}"
     SiteConfig.set_pairwise_credentials(@photocracy)
   end
   
   def initialize_session
+    logger.info "initialize session - db password is #{ENV['SQL_DB_PASSWORD']}"
     session[:session_id] # this forces load of the session in Rails 2.3.x
   end
 
@@ -236,13 +239,11 @@ class ApplicationController < ActionController::Base
 
   def render_not_found(exception)
     log_error(exception)
-    #notify_airbrake(exception) 
     render :template => "errors/404.html.haml", :status => 404
   end
   
   def render_error(exception)
     log_error(exception)
-    #notify_airbrake(exception)
 
     render :template => "errors/500.html.haml", :status => 500
   end
