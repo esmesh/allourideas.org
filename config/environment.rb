@@ -16,3 +16,12 @@ Rails::Initializer.run do |config|
 
 end
 ActionController::Base.cache_store = :file_store, "#{Rails.root}/tmp/cache"
+
+logfile = File.open('/home/aoi/allourideas.org/log/env.log', 'a')  
+my_logger = Logger.new(logfile)
+my_logger.info '~~~~ IN PROCESS:'
+my_logger.info $PROGRAM_NAME
+my_logger.info '     '
+my_logger.info ENV
+my_logger.info '     '
+

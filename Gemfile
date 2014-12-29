@@ -39,30 +39,7 @@ gem "compass-rails", "~> 1.0.3"
 gem "mysql2", "0.2.18"
 gem "test-unit", "1.2.3"
 
-group :development do
-  gem "engineyard", "~> 1.4.29"
-end
-
 group :production, :staging do
   gem "sendgrid", "0.1.4"
-end
-
-group :test, :cucumber do
-  gem 'cucumber', '1.1.0'
-  gem 'cucumber-rails2', '~> 0.3.2'
-  gem "pickle", "~> 0.4.7"
-  gem "poltergeist", "~> 1.0.1"
-  gem "sqlite3", ">=1.3.3"
-  gem "database_cleaner", "0.5.0"
-  gem "capybara", "~> 1.1.2"
-  gem "factory_girl", "~>1.2.1"
-  gem "shoulda", "~> 2.10.1"
-  gem "timecop", "0.3.5"
-  gem "rspec", "1.3.2"
-  gem "rspec-rails", "1.3.4"
-  gem "email_spec", "0.4.0"
-  gem "sendgrid", "0.1.4"
-  gem "fakeweb", "~>1.2.5"
-  gem "jferris-mocha", "0.9.5.0.1241126838", :require => "mocha"
 end
 gem "ey_config"

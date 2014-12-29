@@ -7,7 +7,7 @@ ActionMailer::Base.smtp_settings = {
  :address => "smtp.sendgrid.net",
   :port => '25',
   :authentication => :plain,
-  :domain => "vm-006.casci.rit.edu",
+  :domain => "aoi.casci.rit.edu",
   :user_name => ENV['SENDGRID_USERNAME'],
   :password => ENV['SENDGRID_PASSWORD']
 }

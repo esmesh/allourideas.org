@@ -3,6 +3,14 @@ class ApplicationController < ActionController::Base
 
   helper :all
   protect_from_forgery
+
+logfile = File.open('/home/aoi/allourideas.org/log/env.log', 'a')  
+my_logger = Logger.new(logfile)
+my_logger.info '~~~~ IN PROCESS:'
+my_logger.info $PROGRAM_NAME
+my_logger.info '     '
+my_logger.info ENV
+my_logger.info '     '
   
   before_filter :initialize_session, :get_survey_session, :record_action, :view_filter, :set_pairwise_credentials, :set_locale, :set_p3p_header
   after_filter :write_survey_session_cookie
@@ -15,7 +23,6 @@ class ApplicationController < ActionController::Base
   @@widget_view_path = ActionView::Base.process_view_paths(File.join(Rails.root, "app", "views", "widget")) 
 
   def view_filter
-    logger.info "view filter - db password is #{ENV['SQL_DB_PASSWORD']}"
     if request.url.include?('photocracy') || request.url.include?('fotocracy') || @photocracy || (RAILS_ENV == 'test' && $PHOTOCRACY)
       @photocracy = true
       prepend_view_path(@@photocracy_view_path)
@@ -27,12 +34,10 @@ class ApplicationController < ActionController::Base
   end
 
   def set_pairwise_credentials
-    logger.info "set pw creds - db password is #{ENV['SQL_DB_PASSWORD']}"
     SiteConfig.set_pairwise_credentials(@photocracy)
   end
   
   def initialize_session
-    logger.info "initialize session - db password is #{ENV['SQL_DB_PASSWORD']}"
     session[:session_id] # this forces load of the session in Rails 2.3.x
   end
 
