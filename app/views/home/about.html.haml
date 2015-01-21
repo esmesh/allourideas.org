@@ -2,90 +2,24 @@
   .span8
     %h1 About this project
     %p
-      All Our Ideas is a research project that seeks to develop a new form of social data collection by combining the best features of quantitative and qualitative methods. Using the power of the web, we are creating a data collection tool that has the scale, speed, and quantification of a survey while still allowing for new information to "bubble up" from respondents as happens in interviews, participant observation, and focus groups. 
+      The increasing complexity of scientific software can result in significant impacts [Miller, 2006] on the research itself. In mainstream software development projects, teams adopt historical best practices into their development processes to mitigate the risk of such problems. In contrast, the gap [Kelly 2007] that has formed between the mainstream and scientific software communities leaves scientists to rely on only their own experience when facing software process improvement (SPI) decisions. 
     %p
-      The All Our Ideas research group is led by Matthew Salganik from the Department of Sociology at Princeton University. Our project grew out of discussions between Matt and Josh Weinstein, then president of the Princeton Undergraduate Student Government, about how to collect and prioritize the ideas of Princeton students. A research group was formed, and our first project, a collaboration with the Princeton student government, called <a href="http://www.dailyprincetonian.com/2008/11/06/22005/">"Which do you want more?"</a> was launched in November 2008. All Our Ideas was then launched in February 2010. Current and former group members include (in chronological order): Josh Weinstein, Nadia Heninger, Bill Zeller, Peter Lubell-Doughtie, Dhwani Shah, Adam Sanders, Bambi Tsui, Pius Uzamere, Karen Levy, Dhruv Kapadia, Dmitri Garbuzov, Brian Tubergen, Chap Ambrose, Calvin Lee, and Luke Baker.
-    %p
-      Because All Our Ideas is a research project, we will be analyzing the data that you create. However, we will respect your privacy, and we will never sell your data to anyone. These issues are described more fully in our privacy and consent policy.
-    %p
-      All Our Ideas is powered by <a href="https://github.com/allourideas">open source</a> software. Feel free to review, remix, or redesign. Also, you can use our <a href="https://github.com/allourideas/pairwise-api/wiki/API-Documentation">API</a> to create your own pairwise comparison site.
-    %p
-      For more frequent updates on the project, you can <a href="http://blog.allourideas.org/">read our blog</a>, <a href="http://twitter.com/allourideas">follow us on Twitter</a> or <a href="https://www.facebook.com/allourideas">Like us on Facebook.</a>
-    %p
-      You can contact us by email at
-      = mail_to(APP_CONFIG[:INFO_ALLOURIDEAS_EMAIL])
-    %p
-      = link_to(t('nav.privacy_policy'), privacy_path)
+      In order to construct a Scientific Software Process Improvement Framework (SciSPIF) that will support scientists’ need to select and tailor existing SE practices to suit their own goals [Mesh and Hawker, 2013; Mesh, Burns and Hawker, 2014], we are using a grounded theory-based methodology [Corbin and Strauss, 1990; Charmaz, 2014] combined with this wiki survey [Salganik and Levy, 2012; www.allourideas.org] to discover the motivating factors of scientific SPI decisions and how these factors correlate with the successful adoption of known software engineering best practices.
 
     %h3 Research produced by our group
     %h5 Papers
     %p
-      Salganik, Matthew J. and Karen E.C. Levy. 2012. "Wiki surveys: Open and quantifiable social data collection." Working paper: <a href="http://arxiv.org/abs/1202.0500">http://arxiv.org/abs/1202.0500</a>
-    %h5 Senior Theses
+      Erika S. Mesh, Gabbie Burns and J. Scott Hawker. 2014. Integrating Scientific and Software Engineering Expertise to Support Scientific Software Process Improvement Decisions. Computing in Science and Engineering, Software Engineering Special Edition.
     %p
-      Shah, Dhwani. 2009. Solving Problems Using the Power of Many: Information Aggregation Websites, A Theoretical Framework and Efficacy Test. Senior Thesis. Princeton University: Department of Sociology.
-    %p
-      Weinstein, Joshua R. 2009. Photocracy: Employing Pictoral Pair-Wise Comparison to Study National Identity in China, Japan, and the United States via the Web. Senior Thesis. Princeton University: Department of East Asian Studies.
+      Erika S. Mesh and J. Scott Hawker. 2013. Scientific Software Process Improvement Decisions: A Proposed Research Strategy. In Proceedings of the 5th International Workshop on Software Engineering for Computational Science and Engineering (SE-CSE ’13). pp.32-39
   .span4
     %h3= t('about.current_contributors')
     %p
-      %strong= link_to('Matthew Salganik', 'http://sociology.princeton.edu/Faculty/Salganik/')
+      %strong= link_to('Erika S. Mesh', 'https://esmesh.wordpress.com/cv/')
       %br
-      Department of Sociology, Princeton University
+      PhD. Student, Computing and Information Sciences, Rochester Institute of Technology
     %p
-      %strong= link_to('Karen Levy', 'http://www.karen-levy.net/')
+      %strong= link_to('Dr. J. Scott Hawker', 'http://www.se.rit.edu/~hawker/')
       %br
-      Department of Sociology, Princeton University
-    %p
-      %strong= link_to('Luke Baker', 'http://www.agathongroup.com/')
-      %br
-      Agathon Group
+      Associate Professor, Software Engineering, Rochester Institute of Technology
     %h3= t('about.past_contributors')
-    %p
-      %strong Josh Weinstein
-      %br
-      Princeton Class of 2009
-    %p
-      %strong= link_to('Nadia Heninger', 'http://cseweb.ucsd.edu/~naheninger')
-      %br
-      Department of Computer Science, Princeton
-    %p
-      %strong Bill Zeller
-      %br
-      Department of Computer Science, Princeton
-    %p
-      %strong= link_to('Peter Lubell-Doughtie', 'http://blog.helioid.com')
-      %br
-      Helioid LLC
-    %p
-      %strong Dhwani Shah
-      %br
-      Princeton Class of 2009
-    %p
-      %strong Adam Sanders
-      %br
-      Princeton Class of 2009
-    %p
-      %strong Bambi Tsui
-      %br
-      Princeton Class of 2009
-    %p
-      %strong= link_to('Pius Uzamere', 'http://pius.me')
-      %br
-      WildThinkers
-    %p
-      %strong= link_to('Dhruv Kapadia', 'http://www.dkapadia.com')
-    %p
-      %strong= 'Dmitri Garbuzov'
-      %br
-      Princeton Class of 2010, Google Summer of Code
-    %p
-      %strong= 'Brian Tubergen'
-      %br
-      Princeton Class of 2013, Google Summer of Code
-    %p
-      %strong= link_to('Chap Ambrose', 'http://www.chapambrose.com/')
-    %p
-      %strong= link_to('Calvin Lee', 'http://calvinclee.com/')
-      %br
-      Princeton Class of 2012
