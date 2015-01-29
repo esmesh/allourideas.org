@@ -10,8 +10,8 @@ en:
    photo: photo
    active: active
    inactive: inactive
-   title: All Our Ideas - Bringing survey research into the digital age
-   title_widget: All Our Ideas   
+   title: SciSPIF
+   title_widget: SciSPIF   
    characters: characters
    idea_marketplace: Idea Marketplace
    votes: Votes
@@ -45,11 +45,11 @@ en:
     view_more_results_widget: View More Results
   home:
     whats_this: What is this?
-    whats_this_txt:   All Our Ideas is a platform that enables groups to collect and prioritize ideas in a transparent, democratic, and bottom-up way. It’s a suggestion box for the digital age.
+    whats_this_txt:   SciSPIF is a platform that enables groups to collect and prioritize ideas in a transparent, democratic, and bottom-up way. It’s a suggestion box for the digital age.
     how_does: How does it work?
-    how_does_txt: You can use All Our Ideas to create a website where visitors can vote on ideas and upload new ones. The intuitive and fun voting process yields powerful results.
+    how_does_txt: You can use SciSPIF to create a website where visitors can vote on ideas and upload new ones. The intuitive and fun voting process yields powerful results.
     get_started: Get started!
-    get_started_txt: Click on the link below to get started with All Our Ideas. It is free, easy, and built on open source technology. Create your own interactive suggestion box and start discovering.
+    get_started_txt: Click on the link below to get started with SciSPIF. It is free, easy, and built on open source technology. Create your own interactive suggestion box and start discovering.
     create_a_question: Create a question
     student_government_explanation: This example is based on a site that the Undergraduate Student Government at Princeton University used to discover the best ideas for improving campus. In just a few weeks, more than 2,000 students contributed more than 40,000 votes and 100 new ideas. You can create a question like this to discover the best ideas in your group or organization.
     see_an_example: See an example
@@ -155,7 +155,7 @@ en:
       your_email_address: Your Email Address  
       optional: Optional
       help_us_out: Help Us Out
-      tell_us_why: Please tell us a bit about what you are trying to accomplish with All Our Ideas.
+      tell_us_why: Please tell us a bit about what you are trying to accomplish with SciSPIF.
       tell_us_why2: "Also, feel free to let us know anything else we might find interesting (e.g. how you heard about us, how many visitors you're expecting)"
     enter_a_new_short_url: Enter a new short URL
     edit: edit
@@ -323,15 +323,15 @@ en:
     widget_embed_code: Widget embed code
   footer:
     support: This project is supported by grants from Google and CITP at Princeton University.
-    open_source: All Our Ideas is open source software. Feel free to review, remix, redesign, or contribute.
+    open_source: SciSPIF is open source software. Feel free to review, remix, redesign, or contribute.
     logged_in: Logged in
     logged_in_as: Logged in as %{user}
     my_questions: My Questions
   tour:
     collect: Collect and sort suggestions effectively
-    p1: Just as Wikipedia is a platform that allows groups to collaboratively write an encyclopedia, All Our Ideas is a platform that allows groups to collect and prioritize ideas in a transparent, democratic, and bottom-up process. It’s a suggestion box for the digital age.
-    p2: To see how All Our Ideas works, we’ll walk through a specific example. Imagine that you are the president of the Undergraduate Student Government at Princeton and you need to find the issues of greatest concern to the student body. Everyone is telling you what they want, but nobody fills out surveys so you don’t know how widespread the support for any of these ideas really is. Plus, how do you even know if your student priority survey includes all the important ideas?
-    p3: This is a natural problem for All Our Ideas system of voting and soliciting suggestions. Once the platform for collaboration was created, more than 2,000 students contributed more than 40,000 votes and uploaded more than 100 new suggestions.
+    p1: Just as Wikipedia is a platform that allows groups to collaboratively write an encyclopedia, SciSPIF is a platform that allows groups to collect and prioritize ideas in a transparent, democratic, and bottom-up process. It’s a suggestion box for the digital age.
+    p2: To see how SciSPIF works, we’ll walk through a specific example. Imagine that you are the president of the Undergraduate Student Government at Princeton and you need to find the issues of greatest concern to the student body. Everyone is telling you what they want, but nobody fills out surveys so you don’t know how widespread the support for any of these ideas really is. Plus, how do you even know if your student priority survey includes all the important ideas?
+    p3: This is a natural problem for SciSPIF system of voting and soliciting suggestions. Once the platform for collaboration was created, more than 2,000 students contributed more than 40,000 votes and uploaded more than 100 new suggestions.
     p4: "You can create such a platform for collaboration for your group in a few easy steps. In the end we are going to help you create something that looks like this:"
     step1: "Step 1: Create a website"
     step1_txt: 'Pick a question that voters see. For example, "Which do you want more?"'

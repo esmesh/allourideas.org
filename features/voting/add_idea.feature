@@ -20,7 +20,7 @@ Feature: Add idea to marketplace
       Then I should see "blah blah & blah"
       And "test@example.com" should receive an email 
       When "test@example.com" opens the email
-      Then they should see "[All Our Ideas] idea added to question: test name" in the email subject
+      Then they should see "[SciSPIF] idea added to question: test name" in the email subject
       And they should see "Someone has uploaded the idea 'blah blah & blah' to your question" in the email body
       And they should see "Based on your settings, we have auto-activated the idea" in the email body
       When they click the first link in the email
@@ -41,7 +41,7 @@ Feature: Add idea to marketplace
       Then I should see "blah foo blah"
       And "test@example.com" should receive an email 
       When "test@example.com" opens the email
-      Then they should see "[All Our Ideas] idea added to question: test name" in the email subject
+      Then they should see "[SciSPIF] idea added to question: test name" in the email subject
       And they should see "Someone has uploaded the idea 'blah foo blah' to your question" in the email body
       And they should see "Based on your settings, we have auto-activated the idea" in the email body
       When they click the first link in the email
@@ -61,7 +61,7 @@ Feature: Add idea to marketplace
       Then I should see "blah blah blah"
       And "test@example.com" should receive an email 
       When "test@example.com" opens the email
-      Then they should see "[All Our Ideas] idea added to question: test name" in the email subject
+      Then they should see "[SciSPIF] idea added to question: test name" in the email subject
       And they should see "Someone has uploaded the idea 'blah blah blah' to your question" in the email body
       And they should see "If you want others to be able to vote on this idea, please activate it by visiting the following url:" in the email body
       When they click the first link in the email

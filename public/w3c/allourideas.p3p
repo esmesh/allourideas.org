@@ -18,7 +18,7 @@
     <!-- Description of the entity making this policy statement. -->
     <ENTITY>
     <DATA-GROUP>
-<DATA ref="#business.name">All Our Ideas</DATA>
+<DATA ref="#business.name">SciSPIF</DATA>
 <DATA ref="#business.contact-info.online.email">info@allourideas.org</DATA>
 <DATA ref="#business.contact-info.online.uri">http://allourideas.org</DATA>
     </DATA-GROUP>

@@ -25,7 +25,7 @@ Feature: Flag as inappropriate
 		And the saved left choice should not be active
 		And "flag_test@test.com" should receive an email 
 		When "flag_test@test.com" opens the email
-		Then they should see "[All Our Ideas] Possible inappropriate idea flagged by user" in the email subject
+		Then they should see "[SciSPIF] Possible inappropriate idea flagged by user" in the email subject
 		And they should see "Because it's offensive" in the email body
 		
 	@javascript

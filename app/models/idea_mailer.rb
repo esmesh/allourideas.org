@@ -48,7 +48,7 @@ class IdeaMailer < ActionMailer::Base
   def extra_information(user, question_name, information, photocracy=false)
     @recipients  = APP_CONFIG[:SIGNUPS_ALLOURIDEAS_EMAIL]
     @from        = APP_CONFIG[:INFO_ALLOURIDEAS_EMAIL]
-    @subject     = photocracy ? "[Photocracy] " : "[All Our Ideas] "
+    @subject     = photocracy ? "[Photocracy] " : "[SciSPIF] "
     @sent_on     = Time.now
     @body[:user] = user
     @body[:host] = photocracy ? "www.photocracy.org" : "www.allourideas.org"
@@ -83,7 +83,7 @@ class IdeaMailer < ActionMailer::Base
         @recipients  = user.email
       end
       @from        = photocracy ? APP_CONFIG[:INFO_PHOTOCRACY_EMAIL] : APP_CONFIG[:INFO_ALLOURIDEAS_EMAIL]
-      @subject     = photocracy ? "[Photocracy] " : "[All Our Ideas] "
+      @subject     = photocracy ? "[Photocracy] " : "[SciSPIF] "
       @sent_on     = Time.now
       @body[:user] = user
       @body[:host] = "www.#{photocracy ? 'photocracy' : 'allourideas'}.org"

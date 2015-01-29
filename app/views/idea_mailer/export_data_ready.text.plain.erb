@@ -1,6 +1,6 @@
 <%= t('items.email.hello') %>
 
-You requested an export of data from the <%= @photocracy ? 'Photocracy' : 'All Our Ideas'%> site. Our servers have done some serious computation and your file is available now.
+You requested an export of data from the <%= @photocracy ? 'Photocracy' : 'SciSPIF'%> site. Our servers have done some serious computation and your file is available now.
 
 <%= "http://#{@photocracy ? APP_CONFIG[:PHOTOCRACY_HOST] : APP_CONFIG[:HOST]}#{@url}" %>
 

@@ -8,7 +8,7 @@
     %meta{:property => "og:description", :content => t('home.whats_this_txt')}
     %meta{:property => 'og:image', :content => "#{request.protocol}#{request.host_with_port}" + image_path('favicon.png')}
     %meta{:name => "viewport",  :content => "width=device-width, initial-scale=1.0"}
-    <meta property="og:site_name" content="All Our Ideas"/>
+    <meta property="og:site_name" content="SciSPIF"/>
     %link{:rel => "shortcut icon", :href => "http://aoi.casci.rit.edu/favicon.ico"}
     %title= t('common.title')
     = stylesheet_link_tag 'glyphicon', 'flexslider/flexslider.css', 'styles', 'screen'
@@ -63,7 +63,7 @@
           %span.icon-bar
           %span.icon-bar
         - if show_aoi_nav?
-          %a.brand{:href => '/'}= image_tag('logo_head.png', :alt => "All Our Ideas")
+          %a.brand{:href => '/'}= image_tag('logo_head.png', :alt => "SciSPIF")
         .nav-collapse.collapse
           - if show_aoi_nav?
             %ul.nav
