@@ -28,7 +28,7 @@ class HomeController < ApplicationController
   end
 
   def example
-	  redirect_to("/planyc_example") and return
+	  redirect_to("/goals") and return
   end
 
   def about

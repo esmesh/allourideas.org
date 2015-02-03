@@ -4,14 +4,6 @@ class ApplicationController < ActionController::Base
   helper :all
   protect_from_forgery
 
-logfile = File.open('/home/aoi/allourideas.org/log/env.log', 'a')  
-my_logger = Logger.new(logfile)
-my_logger.info '~~~~ IN PROCESS:'
-my_logger.info $PROGRAM_NAME
-my_logger.info '     '
-my_logger.info ENV
-my_logger.info '     '
-  
   before_filter :initialize_session, :get_survey_session, :record_action, :view_filter, :set_pairwise_credentials, :set_locale, :set_p3p_header
   after_filter :write_survey_session_cookie
 

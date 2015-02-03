@@ -1,6 +1,3 @@
-unless Rails.env == "development" || Rails.env == "test"
-   include SendGrid
-end
 class IdeaMailer < ActionMailer::Base
 
   default_url_options[:host] = APP_CONFIG[:HOST]

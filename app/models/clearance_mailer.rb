@@ -1,6 +1,3 @@
-unless ["development", "test", "cucumber"].include? Rails.env
-   include SendGrid
-end
 class ClearanceMailer < ActionMailer::Base
 
   def change_password(user, photocracy=false)

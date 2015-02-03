@@ -38,8 +38,4 @@ gem "haml", "~> 3.1.7"
 gem "compass-rails", "~> 1.0.3"
 gem "mysql2", "0.2.18"
 gem "test-unit", "1.2.3"
-
-group :production, :staging do
-  gem "sendgrid", "0.1.4"
-end
 gem "ey_config"
