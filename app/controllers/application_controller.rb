@@ -163,14 +163,6 @@ class ApplicationController < ActionController::Base
 	    user_session.user_id = current_user.id
 	    user_session.save!
     end
-
-    if (session[:abingo_identity])
-	    Abingo.identity = session[:abingo_identity]
-    else
-	    session[:abingo_identity] = user_session.id
-	    Abingo.identity = user_session.id
-    end
-      
   end
 
   helper_method :signed_in_as_admin?
@@ -215,9 +207,6 @@ class ApplicationController < ActionController::Base
     if I18n.locale != I18n.default_locale
   	  options.merge!({ :locale => I18n.locale })
     end
-    if Rails.env == "cucumber" && @photocracy
-          options.merge!({:photocracy_mode => true})
-    end
   end
 
   def set_p3p_header
@@ -236,13 +225,11 @@ class ApplicationController < ActionController::Base
 
   def render_not_found(exception)
     log_error(exception)
-    #notify_airbrake(exception) 
     render :template => "errors/404.html.haml", :status => 404
   end
   
   def render_error(exception)
     log_error(exception)
-    notify_airbrake(exception)
 
     respond_to do |format|
       format.html { render :template => "errors/500.html.haml", :status => 500 }

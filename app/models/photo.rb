@@ -6,12 +6,6 @@ class Photo < ActiveRecord::Base
                          },
 			:processors => [:rotator]
                       }
-  unless ["cucumber", "development"].include?(Rails.env)
-    paperclip_options.merge!({ :path => ":attachment/:id/:style.:extension",
-                               :storage => :s3,
-                               :s3_credentials => "#{RAILS_ROOT}/config/s3.yml"
-			      })
-  end
 
   has_attached_file :image, paperclip_options
   #validates_attachment_content_type :image, :content_type => ['image/jpeg', "image/png", "image/gif"], :message => "Not a supported image type (jpg, png, gif only)"

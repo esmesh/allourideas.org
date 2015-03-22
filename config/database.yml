@@ -23,14 +23,3 @@ production:  &default
   #host: localhost
   host: 127.0.0.1
 
-test: &TEST
-  adapter: sqlite3
-  database: db/test.sqlite3
-
-staging:
-  <<: *default
-
-
-cucumber:
-  <<: *TEST
-
