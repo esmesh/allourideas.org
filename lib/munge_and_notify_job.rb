@@ -21,7 +21,7 @@ class MungeAndNotifyJob
     req = Net::HTTP::Get.new(url.path)
     # important to trigger basic HTTP Auth on pairwise
     req["Accept"] = "text/csv"
-    req.basic_auth APP_CONFIG[:PAIRWISE_USERNAME], APP_CONFIG[:PAIRWISE_PASSWORD]
+    req.basic_auth Question.user, Question.password
     res = Net::HTTP.start(url.host, url.port) { |http| http.request(req) }
     if res.code != "200"
       raise "Export URL returned response code of #{res.code} for #{url.to_s}"
@@ -182,7 +182,7 @@ class MungeAndNotifyJob
     znewcsv << zoutput.finish
     zoutput.close
 
-    export_id = Export.connection.insert("INSERT INTO `exports` (`name`, `data`, `compressed`) VALUES (#{Export.connection.quote(export_key)}, #{Export.connection.quote(znewcsv)}, 1)")
+    export_id = Export.connection.insert("INSERT INTO `exports` (`name`, `data`, `compressed`) VALUES (#{Export.connection.quote(export_key)}, #{Export.connection.quote(znewcsv)}, 1)".force_encoding('ASCII-8BIT'))
     Delayed::Job.enqueue DestroyOldExportJob.new(export_id), 20, 3.days.from_now
     url = "/export/#{export_key}"
     IdeaMailer.deliver_export_data_ready(email, url, photocracy)
