@@ -236,13 +236,18 @@ class ApplicationController < ActionController::Base
 
   def render_not_found(exception)
     log_error(exception)
+    #notify_airbrake(exception) 
     render :template => "errors/404.html.haml", :status => 404
   end
   
   def render_error(exception)
     log_error(exception)
+    notify_airbrake(exception)
 
-    render :template => "errors/500.html.haml", :status => 500
+    respond_to do |format|
+      format.html { render :template => "errors/500.html.haml", :status => 500 }
+      format.js   { render :json => {:error => exception.class.name}.to_json, :status => 500 }
+    end
   end
 
   helper_method :wikipedia?

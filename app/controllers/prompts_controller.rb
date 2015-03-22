@@ -4,19 +4,18 @@ class PromptsController < ApplicationController
   include ActionView::Helpers::TextHelper
 
   def vote
-    bingo!("voted")
     voted_prompt = Prompt.new
     voted_prompt.id = params[:id]
     voted_prompt.prefix_options = {:question_id => params[:question_id]}
     session[:has_voted] = true
-    
-    
+
     @earl = Earl.find_by_question_id(params[:question_id])
     if params[:direction] &&
       vote = voted_prompt.post(:vote,
         :question_id => params[:question_id],
           :vote => get_object_request_options(params, :vote),
-          :next_prompt => get_next_prompt_options  
+          :next_prompt => get_next_prompt_options
+        
       )
 
       next_prompt = Hash.from_xml(vote.body)['prompt']
@@ -45,8 +44,6 @@ class PromptsController < ApplicationController
       end
 
       result = add_photocracy_info(result, next_prompt, params[:question_id]) if @photocracy
-      
-      puts "RESULT"      
       render :json => result.to_json
     else
       render :text => 'Vote unsuccessful.', :status => :unprocessable_entity

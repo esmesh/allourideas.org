@@ -1,19 +1,13 @@
 class Question < ActiveResource::Base
-
   self.site = APP_CONFIG[:API_HOST]
   self.user = APP_CONFIG[:PAIRWISE_USERNAME]
   self.password = APP_CONFIG[:PAIRWISE_PASSWORD]
 
   attr_accessor :question_text, :ideas, :url, :information, :email, :password
-  #, :upload
-
+  
   def self.find_id_by_name(name)
     Earl.find(name).question_id rescue nil
   end
-  
-  #def upload=(new_ideas_upload)
-  #  attributes['upload'] = new_ideas_upload
-  #end
   
   def earl
     "/#{Earl.find_by_question_id(id).name}" rescue nil
