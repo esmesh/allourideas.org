@@ -1,14 +1,5 @@
 class Question < ActiveResource::Base
 
-
-logfile = File.open('/home/aoi/allourideas.org/log/env.log', 'a')
-my_logger = Logger.new(logfile)
-my_logger.info '~~~~ Question model IN PROCESS:'
-my_logger.info $PROGRAM_NAME
-my_logger.info '     '
-my_logger.info ENV
-my_logger.info '     '
-
   self.site = APP_CONFIG[:API_HOST]
   self.user = APP_CONFIG[:PAIRWISE_USERNAME]
   self.password = APP_CONFIG[:PAIRWISE_PASSWORD]
