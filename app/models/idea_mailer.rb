@@ -98,7 +98,6 @@ class IdeaMailer < ActionMailer::Base
 
     def get_choice_url(earl_name, choice_id, photocracy, option)
        url_options = {:question_id => earl_name, :id => choice_id}
-       url_options.merge!(:photocracy_mode => true) if photocracy && Rails.env == "cucumber"
        url_options.merge!(:login_reminder => true) if photocracy
 
        if photocracy
