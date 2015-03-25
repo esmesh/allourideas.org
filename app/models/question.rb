@@ -4,7 +4,7 @@ class Question < ActiveResource::Base
   self.password = APP_CONFIG[:PAIRWISE_PASSWORD]
 
   attr_accessor :question_text, :ideas, :url, :information, :email, :password
-  
+
   def self.find_id_by_name(name)
     Earl.find(name).question_id rescue nil
   end

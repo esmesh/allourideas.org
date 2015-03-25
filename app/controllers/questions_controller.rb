@@ -1108,12 +1108,12 @@ class QuestionsController < ApplicationController
     logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url, :upload)}"
     #CATH: this is the object that is sent to the api somehow
     @question = Question.new(params[:question].slice(:name, :ideas, :url, :upload))
-    logger.info("Created new question!")
+    logger.info(" --- Created new question!")
     logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
                      :password => params[:question]['password'],
                      :password_confirmation => params[:question]['password']) unless signed_in?
-
+    logger.info(" --- Created new user!")
     if question_params_valid
       earl_options = {:question_id => @question.id, :name => params[:question]['url'].strip}
       earl_options.merge!(:flag_enabled => true, :photocracy => true) if @photocracy # flag is enabled by default for photocracy

@@ -1,5 +1,4 @@
 log/*
-tmp/**/*
 db/*.sqlite3
 public/system
 *.DS_Store
@@ -10,13 +9,8 @@ todo
 ideas
 ideas.xml
 .sass-cache
-tmp/*
 doc/api
 doc/app
 *~
 .rvmrc
 .bundle
-bin/**
-vendor/**
-Gemfile.lock
-/*.ruby-version
