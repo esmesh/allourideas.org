@@ -17,4 +17,3 @@ doc/app
 .rvmrc
 .bundle
 /*.log
-/Gemfile.lock
