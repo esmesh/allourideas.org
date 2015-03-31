@@ -12,7 +12,7 @@ class ClearanceMailer < ActionMailer::Base
                :photocracy => photocracy
   end
 
-  def confirmation(user, earl_name='http://aoi.casci.rit.edu', photocracy=false)
+  def confirmation(user, earl_name='http://scispif.rit.edu', photocracy=false)
     default_url_options[:host] = (photocracy ? APP_CONFIG[:PHOTOCRACY_HOST] : APP_CONFIG[:HOST])
 
     from_address = photocracy ? APP_CONFIG[:INFO_PHOTOCRACY_EMAIL] : APP_CONFIG[:INFO_ALLOURIDEAS_EMAIL]

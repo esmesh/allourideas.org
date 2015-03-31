@@ -14,6 +14,9 @@ Rails::Initializer.run do |config|
 
   config.action_mailer.delivery_method = :smtp
 
+  config.log_level = :debug
 end
 ActionController::Base.cache_store = :file_store, "#{Rails.root}/tmp/cache"
 
+ActiveResource::Base.logger = Logger.new(STDERR)
+ActiveRecord::Base.logger = Logger.new(STDERR)

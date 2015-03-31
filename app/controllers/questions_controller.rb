@@ -1117,7 +1117,9 @@ class QuestionsController < ApplicationController
     if question_params_valid
       earl_options = {:question_id => @question.id, :name => params[:question]['url'].strip}
       earl_options.merge!(:flag_enabled => true, :photocracy => true) if @photocracy # flag is enabled by default for photocracy
+      logger.info("earls options merged")
       earl = current_user.earls.create(earl_options)
+      logger.info(" --- Created earls!")
       ClearanceMailer.delay.deliver_confirmation(current_user, earl.name, @photocracy)
       IdeaMailer.delay.deliver_extra_information(current_user, @question.name, params[:question]['information'], @photocracy) unless params[:question]["information"].blank?
       session[:standard_flash] = "#{t('questions.new.success_flash')}<br /> #{t('questions.new.success_flash2')}: <a href='#{@question.fq_earl}'>#{@question.fq_earl}</a> #{t('questions.new.success_flash3')}<br /> #{t('questions.new.success_flash4')}: <a href=\"#{@question.fq_earl}/admin\"> #{t('nav.manage_question')}</a>"
