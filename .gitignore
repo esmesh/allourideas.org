@@ -1,4 +1,6 @@
 log/*
+bin/*
+vendor/**
 db/*.sqlite3
 public/system
 *.DS_Store
@@ -15,3 +17,4 @@ doc/app
 .rvmrc
 .bundle
 /*.log
+/Gemfile.lock
