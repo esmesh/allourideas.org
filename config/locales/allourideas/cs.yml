@@ -2,18 +2,6 @@
 # This file has been auto-generated from our Google Docs Spreadsheet.
 ---
 cs:
-  ab_tests:
-    test_ideasubmit:
-      help_your_community: Pomozte své komunitě
-      make_your_voice_heard: Nechte zaznít svůj hlas
-    test_showmespace:
-      make_your_choice: Vyberte si a sledujte, co se bude dít dál
-      please_click: Klikněte na Vaši volbu
-    test_stackoverflow:
-      first_time: Jste tu poprvé? Pro zahájení hlasování klikněte na možnost, která
-        Vám více vyhovuje!
-      no_first_time: Pro zahájení hlasování klikněte na možnost, která se Vám více
-        vyhovuje!
   common:
     X_votes_on_Y_ideas: ! '%{1}%{votes_count}%{_1} hlasů o %{2}%{ideas_count}%{_2}
       návrzích'

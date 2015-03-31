@@ -346,13 +346,3 @@ en:
     see_an_example: See an example
   login:
     header: Log in to your account
-  ab_tests:
-     test_showmespace:
-        make_your_choice: Make your choice and see what comes next
-        please_click: Please click on your choice
-     test_ideasubmit:
-        make_your_voice_heard: "Make your voice heard"
-        help_your_community: "Help your community"
-     test_stackoverflow:
-        first_time: First time here? Click on the choice you like more to start voting!
-        no_first_time: Click on the choice you like more to start voting!

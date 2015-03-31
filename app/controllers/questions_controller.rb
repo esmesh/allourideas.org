@@ -960,7 +960,6 @@ class QuestionsController < ApplicationController
   end
 
   def add_idea
-    bingo!('submitted_idea')
     new_idea_title = params[:new_idea_title]
     new_idea_data = params[:new_idea]
 
