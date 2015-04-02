@@ -95,9 +95,6 @@
       var oldLeftDiv = $('.leftside.btn-vote-idea').closest('div');
       var oldRightDiv = $('.rightside.btn-vote-idea').closest('div');
       
-      var oldInfoLeft = $('#left_choice_exp');
-      var oldInfoRight = $('#right_choice_exp');
-      
       var newLeftDiv = oldLeftDiv.clone(true).hide();
       var newRightDiv = oldRightDiv.clone(true).hide();
       var newLeft = newLeftDiv.find('.btn-vote-idea');
@@ -106,19 +103,15 @@
       
       bothNew.addClass('btn-primary').removeClass('btn-success').removeClass('disabled');
 
-      newLeft.html(data.newleft);
-      newRight.html(data.newright);
+      newLeft.html('<h2>'+data.newleft+'</h2><p>'+data.newleftText+'</p>');
+      newRight.html('<h2>'+data.newright+'</h2><p>'+data.newrightText+'</p>');
       newLeft.data('choice_id', data.left_choice_id);
       newLeft.data('choice_url', data.left_choice_url);
+      newLeft.data('title', data.newleft);
       newRight.data('choice_id', data.right_choice_id);
       newRight.data('choice_url', data.right_choice_url);
+      newRight.data('title', data.newright);
        
-      oldInfoLeft.find('.modal-header').find('h2').text(data.newleft);      
-      oldInfoLeft.find('.modal-body').text(data.newleftText);
-      
-      oldInfoRight.find('.modal-header').find('h2').text(data.newright);
-      oldInfoRight.find('.modal-body').text(data.newrightText);
-
       newLeftDiv.insertBefore(oldLeftDiv);
       newRightDiv.insertBefore(oldRightDiv);
       

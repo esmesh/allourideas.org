@@ -30,14 +30,12 @@
   %ul.votebox.answers.row-fluid.unstyled.intro-popover{"data-title" => "You can vote by clicking on one of these options. When you click, new options will appear. You can vote as many times as you want.", "data-trigger" => "manual", "data-placement" => "bottom"}
     %li.span5.offset1.leftside
       %div
-        = render(:partial => 'questions/idea', :locals => {:data => @left_choice_title, :side => "leftside", :choice_id => @left_choice_id})
-        = link_to('more info', '#left_choice_exp', :"data-toggle" => 'modal', :class => 'more_info')
+        = render(:partial => 'questions/idea', :locals => {:title => @left_choice_title, :data => @left_choice_text, :side => "leftside", :choice_id => @left_choice_id})
       -if @earl.flag_enabled?
         %p.flag= link_to(t('vote.flag_as_inappropriate'), "#flag_inappropriate", :id => 'left_flag', :class=> 'flag_link', :"data-toggle" => 'modal')
     %li.span5.rightside
       %div
-        = render(:partial => 'questions/idea', :locals => {:data => @right_choice_title, :side => "rightside", :choice_id => @right_choice_id})
-        = link_to('more info', '#right_choice_exp', :"data-toggle" => 'modal', :class => 'more_info')
+        = render(:partial => 'questions/idea', :locals => {:title => @right_choice_title, :data => @right_choice_text, :side => "rightside", :choice_id => @right_choice_id})
       -if @earl.flag_enabled?
         %p.flag= link_to(t('vote.flag_as_inappropriate'), "#flag_inappropriate", :id => 'right_flag',:class => 'flag_link', :"data-toggle" => 'modal')
 
@@ -87,21 +85,6 @@
                         .rightside
                           %em= h(@right_choice_text)
                           
-#left_choice_exp.hide.modal.fade
-  .modal-header
-    %button.close{:"data-dismiss" => "modal"}x
-    %h2= @left_choice_title
-  .modal-body
-    = @left_choice_text
-    
-#right_choice_exp.hide.modal.fade
-  .modal-header
-    %button.close{:"data-dismiss" => "modal"}x
-    %h2= @right_choice_title
-  .modal-body
-    = @right_choice_text
-
-
 -if @earl.flag_enabled?
   #flag_inappropriate.hide.modal.fade
     .modal-body
