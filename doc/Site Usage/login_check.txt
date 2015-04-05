@@ -1,0 +1,16 @@
+@startuml
+title login_check 
+start
+if (logged in)  then (yes)
+else (no) 
+   fork
+      :Visitor logs 
+      in as known user. ;
+   fork again 
+      :Visitor creates a
+      new user account. ;
+      note right: 7: Create a new signup page
+   end fork
+endif
+stop
+@enduml 

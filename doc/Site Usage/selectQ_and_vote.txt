@@ -1,0 +1,34 @@
+@startuml 
+title selectQ_and_vote 
+start
+repeat
+   :User views a list of active wiki
+    surveys and selects one;
+	note left: 28: Add a page for a list of available questions
+   :User is presented with the question
+    and a pair of responses;
+
+   note left
+9: Add banner with instructions to question/pair selection
+11: Add title field to Choice model in pairwise-api
+12: Add “title” field to choices form
+13: Add descriptions/more info for each choice
+15: Subjects should never get the same pair twice
+   end note
+
+   fork
+      :Pick left or right
+       side option ;
+      note left: 3: Save user information for each vote
+   fork again 
+      :Select "I can't decide" ;
+      :Provide reason;
+   fork again 
+      :Provide an 
+      alternative option ;
+      note left: 14: Add “title” for subject entered choices
+   end fork 
+repeat while (Vote again?) 
+note right: 23: Save user information for skipped pairs
+stop
+@enduml 

@@ -1,0 +1,51 @@
+@startuml
+title Main
+start
+:Page loads;
+note left
+10: Disable back button (bug)
+19: Get base URL from ENV and remove hardcoded refs
+20: Sync our fork with base repos in GitHub
+21: Configure AOI and pairwise apps to run and use each other
+22: Don’t hardcode passwords
+29: Update SMTP Info
+31: Change production pairwise API usernames/passwords from defaults
+end note
+repeat 
+:Visitor views study overview on Main page;
+note left
+1: Modify front page to be about our research
+2: Add support for subject user logins before they can answer questions
+8: Only let admin users create questions
+17: Don't sign up users when they create a question
+18: Admin users should be able to see their questions' admin page
+26: Modify About page to be about SciSPIF
+27: Modify header bar to have RIT logo and "SciSPIF" instead of AOI
+30: Subject Creation Email refers to creating a question (bug)
+end note
+fork
+   :Visitor views details
+    on About page;
+fork again 
+   :Visitor logs in;
+fork again 
+   :Visitor elects to complete
+    demographics survey ;
+  #Aqua:login_check;
+   #Aqua:complete_profile ;
+fork again 
+   :Visitor elects to 
+   participate in a wiki survey ;
+  #Aqua:login_check;
+   #Aqua:selectQ_and_vote;
+fork again 
+   :Visitor is looking for 
+   lessons learned from peers. ;
+  #Aqua:login_check;
+   #Aqua:view_responses;
+end fork
+
+repeat while (Back to main page?) 
+
+stop
+@enduml 
