@@ -3,10 +3,9 @@ class User < ActiveRecord::Base
   has_many :earls
   has_many :session_infos
   has_many :clicks
-  attr_accessible :default
   has_many :user_programming_languages, :class_name => "UserProgrammingLanguages"
   has_many :programming_languages, through: :user_programming_languages
-  attr_accessible :default, :department
+  attr_accessible :default, :department, :remember_token
   before_validation_on_create :set_confirmed_email
   
   def self.level_score(params = {:votes => 0, :ideas => 0})
