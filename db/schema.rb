@@ -228,7 +228,7 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
     t.string   "encrypted_password",           :limit => 128
     t.string   "salt",                         :limit => 128
     t.string   "confirmation_token",           :limit => 128
-    t.string   "remember_token",               :limit => 128, :default => ""
+    t.string   "remember_token",               :limit => 128
     t.boolean  "email_confirmed",                             :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"

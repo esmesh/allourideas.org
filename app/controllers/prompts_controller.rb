@@ -33,8 +33,6 @@ class PromptsController < ApplicationController
         :prompt_id         => next_prompt['id'],
       }
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
@@ -79,8 +77,6 @@ class PromptsController < ApplicationController
         :message => t('vote.cant_decide_message')
       }
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
@@ -147,8 +143,6 @@ class PromptsController < ApplicationController
         :message => t('vote.flag_complete_message')
       }
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       result = add_photocracy_info(result, next_prompt, params[:question_id]) if @photocracy
       render :json => result.to_json
