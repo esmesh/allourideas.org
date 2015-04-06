@@ -257,7 +257,7 @@ function castVote(choice, x, y) {
 				$('a.vote').removeClass('loading'); 
 			};
 			incrementVoteCount();
-			incrementVisitorVoteCount(); 
+			incrementUserVoteCount(); 
 			choice.removeClass('checked');
 			PAGE_LOADED_AT = new Date(); // reset the page load time
 		}
@@ -270,9 +270,9 @@ function incrementVoteCount() {
 	);
 }
 
-function incrementVisitorVoteCount() {
-	$('#visitor_votes').text(
-		increment($('#visitor_votes').text())
+function incrementUserVoteCount() {
+	$('#user_votes').text(
+		increment($('#user_votes').text())
 	);
 }
 
@@ -333,17 +333,17 @@ function calculateClickOffset(axis, e, choice) {
 	}
 }
 
-function updateVotingHistory(data, update_visitor_votes) {
+function updateVotingHistory(data, update_user_votes) {
 
-	if(update_visitor_votes == undefined){
-	   update_visitor_votes = true  //update visitor_votes by default
+	if(update_user_votes == undefined){
+	   update_user_votes = true  //update user_votes by default
 	}
 		
 
 	var winner = data['voted_prompt_winner'];
 	
-	if(update_visitor_votes)
-		updateVisitorVotes(data['visitor_votes']);
+	if(update_user_votes)
+		updateUserVotes(data['user_votes']);
 
 	addThumbnailsToHistory($('.left').attr('thumb'), $('.left').attr('choice_url'), $('.right').attr('thumb'), $('.right').attr('choice_url'), data['voted_at'], winner);
 
@@ -361,9 +361,9 @@ function addThumbnailsToHistory(left_thumb, left_url, right_thumb, right_url, vo
 	");
 }
 
-function updateVisitorVotes(number_of_votes) {
+function updateUserVotes(number_of_votes) {
 	// update vote count
-	$('#visitor_votes').text(number_of_votes);
+	$('#user_votes').text(number_of_votes);
 
 	// your voteS unless you've only voted once
 	(number_of_votes == 1) ? $('#s').hide() : $('#s').show();

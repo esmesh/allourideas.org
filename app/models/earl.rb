@@ -27,36 +27,36 @@ class Earl < ActiveRecord::Base
 
   def self.voter_map(earl_name, type)
     if type == "all"
-      votes_by_sids = Question.get(:all_num_votes_by_visitor_id, :scope => "all_votes")
+      votes_by_sids = Question.get(:all_num_votes_by_user_id, :scope => "all_votes")
     elsif type == 'all_photocracy_votes'
-      votes_by_sids = Question.get(:all_num_votes_by_visitor_id, :scope => type)
+      votes_by_sids = Question.get(:all_num_votes_by_user_id, :scope => type)
     elsif type == 'all_aoi_votes'
-      votes_by_sids = Question.get(:all_num_votes_by_visitor_id, :scope => type)
+      votes_by_sids = Question.get(:all_num_votes_by_user_id, :scope => type)
     elsif type == "all_creators"
-      votes_by_sids = Question.get(:all_num_votes_by_visitor_id, :scope => "creators")
+      votes_by_sids = Question.get(:all_num_votes_by_user_id, :scope => "creators")
     elsif type == "uploaded_ideas"
          
       earl = Earl.find earl_name
       question = Question.new
       question.id = earl.question_id
-      votes_by_sids = question.get(:object_info_by_visitor_id, :object_type => 'uploaded_ideas')
+      votes_by_sids = question.get(:object_info_by_user_id, :object_type => 'uploaded_ideas')
     elsif type == "bounces"
       earl = Earl.find earl_name
       question = Question.new
       question.id = earl.question_id
-      votes_by_sids = question.get(:object_info_by_visitor_id, :object_type => 'bounces')
+      votes_by_sids = question.get(:object_info_by_user_id, :object_type => 'bounces')
 
     elsif type == "votes"
       earl = Earl.find earl_name
       question = Question.new
       question.id = earl.question_id
-      votes_by_sids = question.get(:object_info_by_visitor_id, :object_type => 'votes')
+      votes_by_sids = question.get(:object_info_by_user_id, :object_type => 'votes')
     end
      
     votes_by_geoloc= {}
     object_total = 0
     votes_by_sids.each do |vote|
-      sid = vote["visitor_id"]
+      sid = vote["user_id"]
       num_votes = vote["count"]
       num_votes = num_votes.to_i
       session = SessionInfo.find_by_session_id(sid)

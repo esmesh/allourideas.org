@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
     elsif controller_name == 'prompts'
       @question_id = params[:question_id]
     elsif controller_name == 'questions'
-      if ['add_idea', 'visitor_voting_history'].include?(action_name)
+      if ['add_idea', 'user_voting_history'].include?(action_name)
         @question_id = params[:id]
       elsif ['results', 'about', 'admin', 'update_name'].include?(action_name)
         @earl = Earl.find_by_name(params[:id])
@@ -137,23 +137,23 @@ class ApplicationController < ActionController::Base
   end
   
   def record_action
-    visitor_remember_token = cookies[:visitor_remember_token]
+    user_remember_token = cookies[:user_remember_token]
 
-    unless visitor_remember_token
-	  visitor_remember_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand(10**10)}--")
+    unless user_remember_token
+	  user_remember_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand(10**10)}--")
 
-          cookies[:visitor_remember_token] = {
-            :value   => visitor_remember_token, 
+          cookies[:user_remember_token] = {
+            :value   => user_remember_token, 
             :expires => 10.years.from_now.utc
           }
     end
 
-    visitor = Visitor.find_or_create_by_remember_token(:remember_token => visitor_remember_token)
+    user = User.find_or_create_by_remember_token(:remember_token => user_remember_token)
     user_session = SessionInfo.find_or_create_by_session_id(:session_id => @survey_session.session_id,
 						       :ip_addr => request.remote_ip,
 						       :user_agent => request.env["HTTP_USER_AGENT"],
 						       :white_label_request => white_label_request?, 
-						       :visitor_id => visitor.id)
+						       :user_id => user.id)
     @user_session = user_session
 
     sql = ActiveRecord::Base.send(:sanitize_sql_array, ["INSERT INTO `clicks` (`url`, `controller`, `action`, `user_id`, `referrer`, `session_info_id`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", request.url, controller_name, action_name, current_user.try(:id), request.referrer, user_session.try(:id), Time.now.utc, Time.now.utc])

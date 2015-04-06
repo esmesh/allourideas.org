@@ -517,9 +517,9 @@ class QuestionsController < ApplicationController
   def scatter_votes_vs_skips
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'votes'))
+    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
 
-    skips_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'skips'))
+    skips_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
     chart_data = []
     max_x = 0
@@ -623,8 +623,8 @@ class QuestionsController < ApplicationController
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
 
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'votes'))
-    bounces_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'bounces'))
+    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
+    bounces_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'bounces'))
 
     if bounces_by_sids != "\n"
       bounce_hash = {}
@@ -639,7 +639,7 @@ class QuestionsController < ApplicationController
       objects_by_sids = votes_by_sids
 
     when "skips"
-      skips_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'skips'))
+      skips_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
       skips_by_sids.each do |k,v|
         votes_by_sids.delete(k)
@@ -742,7 +742,7 @@ class QuestionsController < ApplicationController
       if totals == "true"
         chart_title = t('results.number_of') +  t('common.users').titleize + t('results.per_day')
         y_axis_title = t('results.number_of') + t('common.users')
-        result = SessionInfo.find(:all, :select => 'date(created_at) as date, visitor_id, count(*) as session_id_count', :group => 'date(created_at), visitor_id')
+        result = SessionInfo.find(:all, :select => 'date(created_at) as date, user_id, count(*) as session_id_count', :group => 'date(created_at), user_id')
         votes_count_hash = Hash.new(0)
 
         result.each do |r|
@@ -977,7 +977,7 @@ class QuestionsController < ApplicationController
       end
     end
 
-    choice_params = {:visitor_identifier => @survey_session.session_id,
+    choice_params = {:user_identifier => @survey_session.session_id,
       :data => new_idea_data,
       :title => new_idea_title,
       :question_id => params[:id]}
@@ -987,8 +987,8 @@ class QuestionsController < ApplicationController
 
     if @choice = Choice.create(choice_params)
       @question = Question.find(params[:id], :params => {
-        :with_visitor_stats => true,
-        :visitor_identifier => @survey_session.session_id
+        :with_user_stats => true,
+        :user_identifier => @survey_session.session_id
       })
       @earl = Earl.find_by_question_id(params[:id])
 
@@ -1136,7 +1136,7 @@ class QuestionsController < ApplicationController
   def question_params_valid
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
-                                  'visitor_identifier' => @survey_session.session_id})
+                                  'user_identifier' => @survey_session.session_id})
       return true if @question.save
     else
       return false
@@ -1278,7 +1278,7 @@ class QuestionsController < ApplicationController
     new_photo = Photo.create(:image => params[:Filedata], :original_file_name => params[:Filedata].original_filename)
     if new_photo.valid?
       choice_params = {
-        :visitor_identifier => params[:session_identifier],
+        :user_identifier => params[:session_identifier],
         :data => new_photo.id,
         :question_id => @earl.question_id,
         :active => true
@@ -1295,7 +1295,7 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def visitor_voting_history
+  def user_voting_history
     @votes = Session.new(:id => @survey_session.session_id).get(:votes, :question_id => params[:id])
 
     if @photocracy
@@ -1350,7 +1350,7 @@ class QuestionsController < ApplicationController
     def object_info_to_hash(array)
       hash = {}
       array.each do |a|
-        hash[a["visitor_id"]] = a["count"]
+        hash[a["user_id"]] = a["count"]
       end
       return hash
     end

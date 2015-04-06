@@ -25,8 +25,8 @@ class EarlsController < ApplicationController
       
       show_params = {:with_prompt => true, 
 		     :with_appearance => true, 
-		     :with_visitor_stats => true,
-		     :visitor_identifier => @survey_session.session_id}
+		     :with_user_stats => true,
+		     :user_identifier => @survey_session.session_id}
 
       show_params.merge!({:future_prompts => {:number => 1}, :with_average_votes => true}) if @photocracy
 

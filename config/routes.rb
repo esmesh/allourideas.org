@@ -22,7 +22,7 @@ ActionController::Routing::Routes.draw do |map|
       :addphotos => :get,
       :upload_photos => :post,
       :admin_stats => :get,
-      :visitor_voting_history => :get
+      :user_voting_history => :get
     } do |question|
 	  question.resources :prompts, 
 		  :only => [:vote, :skip, :flag],

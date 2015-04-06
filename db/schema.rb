@@ -176,7 +176,6 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "white_label_request"
-    t.integer  "visitor_id"
     t.integer  "user_id"
     t.string   "loc_info_2",          :default => ""
   end
@@ -255,13 +254,5 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["id", "confirmation_token"], :name => "index_users_on_id_and_confirmation_token"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
-
-  create_table "visitors", :force => true do |t|
-    t.string   "remember_token", :default => ""
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "visitors", ["remember_token"], :name => "index_visitors_on_remember_token"
 
 end

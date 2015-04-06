@@ -5,7 +5,6 @@ class UserTest < ActiveSupport::TestCase
   should_have_many :session_infos
   should_have_many :clicks
 
-
   should "be valid with factories" do
     assert_valid Factory.build(:user)
     assert_valid Factory.create(:user)

@@ -17,7 +17,7 @@
   #secondary_content
     .grid_4
       %h5.no_margin
-        Your <span id="visitor_votes"></span> vote<span id="s">s</span>
+        Your <span id="user_votes"></span> vote<span id="s">s</span>
         -if @show_average_votes
           %span.normal= "(average is <span id='average_votes'>#{@question.attributes['average_votes']}</span>)"
       .padding
@@ -165,10 +165,10 @@
       
       $('#how_does_this_work').dialog({autoOpen:false, width:600, height: 800});
 
-      // load the visitor's voting history
-      jQuery.get('/questions/#{@question.id}/visitor_voting_history.json', function(data){
+      // load the user's voting history
+      jQuery.get('/questions/#{@question.id}/user_voting_history.json', function(data){
 
-        updateVisitorVotes(data['votes'].length);
+        updateUserVotes(data['votes'].length);
 
         jQuery.each(data['votes'], function() {
           var left_url = "/#{@earl.name}/choices/" + this['left_choice_id'] + "?locale=" + RAILS_LOCALE;

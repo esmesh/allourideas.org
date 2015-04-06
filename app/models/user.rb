@@ -9,6 +9,12 @@ class User < ActiveRecord::Base
   attr_accessible :default, :department
   before_validation_on_create :set_confirmed_email
   
+  def self.level_score(params = {:votes => 0, :ideas => 0})
+    score = (A * params[:votes] + B)**C + (D * params[:ideas] + E)**F
+
+    [score, 99].min # only 10 levels
+  end
+
   def owns?(earl)
     earl.user_id == id
   end
