@@ -6,7 +6,7 @@
 # no regular words or you'll be exposed to dictionary attacks.
 
 ActionController::Base.session = {
-  :key => "_allourideas_ey__session_#{RAILS_ENV}",
+  :key => "_scispif_ey__session_#{RAILS_ENV}",
   :secret      => APP_CONFIG[:BASE_SESSION_SECRET]
 }
 
