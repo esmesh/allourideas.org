@@ -6,6 +6,9 @@ class SurveySession
   attr_reader :cookie_name, :old_session_id
 
   def initialize(data, cookie_name=nil)
+    Rails.logger.info("SurveySession initialize")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data, @cookie_name = data, cookie_name
 
     # Clean up question_id to ensure it is either a positive integer or nil.
@@ -37,29 +40,47 @@ class SurveySession
   end
 
   def session_id
+    Rails.logger.info("SurveySession session_id")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data[:session_id]
   end
 
   def appearance_lookup
+    Rails.logger.info("SurveySession appearance_lookup")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data[:appearance_lookup]
   end
 
   def question_id
+    Rails.logger.info("SurveySession question_id")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data[:question_id]
   end
 
   def appearance_lookup=(appearance_id)
+    Rails.logger.info("SurveySession appearance_lookup=(appearance_id)")
     if @data[:question_id].nil?
       raise SessionHasNoQuestionId, "Can't set appearance_id when session has no question_id"
     end
     @data[:appearance_lookup] = appearance_id
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
   end
 
   def expired?
+    Rails.logger.info("SurveySession expired?")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data[:expiration_time] < Time.now.utc
   end
 
   def update_expiry
+    Rails.logger.info("SurveySession update_expiry")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
     @data[:expiration_time] = @@expire_time.from_now.utc
   end
 
@@ -80,6 +101,10 @@ class SurveySession
   # return the cookie data and cookie name in an array that best matches.
   # If there are multiple cookies that match, we return the first that is matched.
   def self.find(cookies, question_id, appearance_lookup=nil)
+    Rails.logger.info("SurveySession find")
+    Rails.logger.info(cookies)
+    Rails.logger.info(question_id)
+    Rails.logger.info(appearance_lookup)
     if question_id.to_i < 1 && !appearance_lookup.nil?
       raise SessionHasNoQuestionId, "Can't find session with appearance_lookup that has no question_id"
     end
@@ -107,6 +132,11 @@ class SurveySession
           # the first cookie that is match. There may be other matches, but we
           # have no way to determine which might be best. We always return the
           # first matching cookie for this search.
+          Rails.logger.info("cookie_name:")
+          Rails.logger.info(cookie_name)
+          Rails.logger.info("data[:appearance_lookup]")
+          Rails.logger.info(data[:appearance_lookup])
+          Rails.logger.info("")
           return [data, cookie_name] if appearance_lookup.nil?
           if data[:appearance_lookup] == appearance_lookup
             return [data, cookie_name]

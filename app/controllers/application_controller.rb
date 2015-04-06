@@ -104,6 +104,9 @@ class ApplicationController < ActionController::Base
       # Based on the cookies, question_id, and appearance_lookup, find the
       # proper session for this request.
       logger.info("params[:appearance_lookup]: ")
+      logger.info(cookies)
+      logger.info(@question_id)
+      logger.info(:appearance_lookup)
       logger.info(params[:appearance_lookup])
       session_data = SurveySession.find(cookies, @question_id, params[:appearance_lookup])
     rescue CantFindSessionFromCookies => e
@@ -114,6 +117,7 @@ class ApplicationController < ActionController::Base
         logger.info ("Trying to create a new session from the @question_id:")
         logger.info(@question_id)
         session_data = [{:question_id => @question_id }]
+        logger.info(session_data)
       else
         logger.info ("appearance_lookup wasn't nil but cookie not found")
         raise e
@@ -121,6 +125,7 @@ class ApplicationController < ActionController::Base
     end
     # Create new SurveySession object for this request.
     @survey_session = SurveySession.send(:new, *session_data)
+    logger.info(@survey_session)
     if @survey_session.expired?
       # This will regenerate the session_id, saving the old one.
       # We can send along both the new and old session_id to pairwise
@@ -136,12 +141,15 @@ class ApplicationController < ActionController::Base
   # Called as a after_filter to ensure we pass along the updated survey session
   # cookie in the response to this request.
   def write_survey_session_cookie
+    logger.info("write_survey_session_cookie name:")
+    logger.info(@survey_session.cookie_name)
     cookies[@survey_session.cookie_name] = {
       :value => @survey_session.cookie_value
     }
   end
   
   def record_action
+    logger.info("record_action")
     user_remember_token = cookies[:user_remember_token]
 
     unless user_remember_token

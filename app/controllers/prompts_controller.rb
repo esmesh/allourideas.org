@@ -190,6 +190,9 @@ class PromptsController < ApplicationController
   end
 
   def get_object_request_options(params, request_type)
+    logger.info("get_object_request_options")
+    logger.info(params)
+    logger.info(request_type)
      options = { :user_identifier => @survey_session.session_id,
                  # use static value of 5 if in test, so we can mock resulting API queries
                  :time_viewed => (Rails.env == 'test') ? 5 : params[:time_viewed],
@@ -197,6 +200,7 @@ class PromptsController < ApplicationController
                  #CATH: this is to send the voter's user id to the API
                  :site_user_id => current_user.id 
      }
+     logger.info(options)
     if @survey_session.old_session_id
       options.merge!({:old_user_identifier => @survey_session.old_session_id})
     end
