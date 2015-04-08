@@ -6,6 +6,8 @@ class EarlsController < ApplicationController
   before_filter :authenticate, :only => [:show]
 
   def show
+    logger.info("Earls controller show - prams")
+    logger.info(params)
     session[:welcome_msg] = @earl.welcome_message.blank? ? nil: @earl.welcome_message
     
     if @earl
@@ -39,10 +41,12 @@ class EarlsController < ApplicationController
       end
 
       
-      @survey_session.appearance_lookup = @question.attributes["appearance_id"]
-      logger.info "inside questions#show " + @question.inspect
-      logger.info("Question attributes:")
+      logger.info("Earls_Controller: @survey_session.appearance_lookup = @question.attributes[\"appearance_id\"]")
       logger.info(@question.attributes)
+      logger.info(@question.attributes["appearance_id"])
+      @survey_session.appearance_lookup = @question.attributes["appearance_id"]
+
+      logger.info "inside questions#show " + @question.inspect
 
        # we can probably make this into one api call
        @prompt = Prompt.find(@question.attributes['picked_prompt_id'], :params => {:question_id => @question.id})
