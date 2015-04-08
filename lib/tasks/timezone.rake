@@ -42,7 +42,10 @@ namespace :timezone do
         { :range => 791742..791769, :h => 8},
       ],
       :users => [
-        { :range => 1127..1127, :h => 7} # based on click id 5780742
+        { :range => 1375991..1376030, :h => 7},
+        { :range => 1376031..1376104, :h => 8},
+        { :range => 281684..281698, :h => 7},
+        { :range => 281699..281737, :h => 8},
       ],
     }
     # UTC because Rails will be thinking DB is in UTC when we run this
@@ -72,7 +75,7 @@ namespace :timezone do
       :session_infos  => 2272643,
       :slugs          => 2194,
       :trials         => 1312182,
-      :users          => 1377,
+      :users          => 2037537,
       :delayed_jobs   => 2143601,
     }
 
