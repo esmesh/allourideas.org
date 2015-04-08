@@ -19,6 +19,10 @@ class PromptsController < ApplicationController
       )
 
       next_prompt = Hash.from_xml(vote.body)['prompt']
+      Rails.logger.info("Prompts_Controller vote:")
+      Rails.logger.info(vote.body)
+      Rails.logger.info("Prompts_Controller vote: next prompt:")
+      Rails.logger.info(next_prompt)
 
       result = {
         :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
@@ -32,6 +36,9 @@ class PromptsController < ApplicationController
         :appearance_lookup => next_prompt['appearance_id'],
         :prompt_id         => next_prompt['id'],
       }
+      Rails.logger.info("Prompts_Controller vote: result:")
+      Rails.logger.info(result)
+
       @survey_session.appearance_lookup = result[:appearance_lookup]
 
       if wikipedia?

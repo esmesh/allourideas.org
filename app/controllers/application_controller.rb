@@ -15,6 +15,8 @@ class ApplicationController < ActionController::Base
   @@widget_view_path = ActionView::Base.process_view_paths(File.join(Rails.root, "app", "views", "widget")) 
 
   def view_filter
+    logger.info("AppController view_filter - params")
+    logger.info(params)
     if request.url.include?('photocracy') || request.url.include?('fotocracy') || @photocracy || (RAILS_ENV == 'test' && $PHOTOCRACY)
       @photocracy = true
       prepend_view_path(@@photocracy_view_path)
@@ -26,15 +28,21 @@ class ApplicationController < ActionController::Base
   end
 
   def set_pairwise_credentials
+    logger.info("AppController set_pairwise_credentials - params")
+    logger.info(params)
     SiteConfig.set_pairwise_credentials(@photocracy)
   end
   
   def initialize_session
+    logger.info("AppController initialize_session - params")
+    logger.info(params)
     session[:session_id] # this forces load of the session in Rails 2.3.x
   end
 
   helper_method :white_label_request?
   def white_label_request?
+    logger.info("AppController white_label_request? - params")
+    logger.info(params)
 	  @_white_label ||= session[:white_label]
 	  if @_white_label.nil?
 		  if params[:white_label] == "true"
@@ -48,12 +56,16 @@ class ApplicationController < ActionController::Base
 
   helper_method :show_aoi_nav?
   def show_aoi_nav?
+    logger.info("AppController show_aoi_nav? - params")
+    logger.info(params)
     return true
     #!white_label_request? && (controller_name == 'home' || (controller_name == 'questions' && action_name == 'new'))
   end
 
   # called when the request is not verified via the authenticity_token
   def handle_unverified_request
+    logger.info("AppController handle_unverified_request - params")
+    logger.info(params)
     super
     # Appearance_lookup can act like an authenticity token because
     # get_survey_session will raise an error if no cookie found with proper appearance_lookup
@@ -72,6 +84,8 @@ class ApplicationController < ActionController::Base
   # okay as they don't pass any session information to pairwise. A separate
   # session is kept for requests that have no question_id.
   def set_question_id_earl
+    logger.info("AppController set_question_id_earl - params")
+    logger.info(params)
     @question_id = nil
     if [controller_name, action_name] == ['earls', 'show']
       @earl = Earl.find_by_name(params[:id])
@@ -97,6 +111,8 @@ class ApplicationController < ActionController::Base
 
   # Called as a before_filter.
   def get_survey_session
+    logger.info("AppController get_survey_session - params")
+    logger.info(params)
     # First order of business is to set the question_id.
     set_question_id_earl
 
@@ -131,12 +147,19 @@ class ApplicationController < ActionController::Base
   # Called as a after_filter to ensure we pass along the updated survey session
   # cookie in the response to this request.
   def write_survey_session_cookie
+    logger.info("AppController write_survey_session_cookie - params")
+    logger.info(params)
+    logger.info("write_survey_session_cookie name:")
+    logger.info(@survey_session.cookie_name)
     cookies[@survey_session.cookie_name] = {
       :value => @survey_session.cookie_value
     }
   end
   
   def record_action
+    logger.info("AppController record_action - params")
+    logger.info(params)
+    logger.info("record_action")
     visitor_remember_token = cookies[:visitor_remember_token]
 
     unless visitor_remember_token
