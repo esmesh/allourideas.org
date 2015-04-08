@@ -1,7 +1,7 @@
 class SurveySession
   @@verifier = ActiveSupport::MessageVerifier.new(APP_CONFIG[:SURVEY_SESSION_SECRET])
   @@expire_time = 10.minutes
-  @@cookie_prefix = "aoi_"
+  @@cookie_prefix = "scispif_"
 
   attr_reader :cookie_name, :old_session_id
 
@@ -62,6 +62,7 @@ class SurveySession
 
   def appearance_lookup=(appearance_id)
     Rails.logger.info("SurveySession appearance_lookup=(appearance_id)")
+    Rails.logger.info(appearance_id)
     if @data[:question_id].nil?
       raise SessionHasNoQuestionId, "Can't set appearance_id when session has no question_id"
     end
