@@ -977,7 +977,7 @@ class QuestionsController < ApplicationController
       end
     end
 
-    choice_params = {:user_identifier => @survey_session.session_id,
+    choice_params = {:visitor_identifier => @survey_session.session_id,
       :data => new_idea_data,
       :title => new_idea_title,
       :question_id => params[:id]}
@@ -988,7 +988,7 @@ class QuestionsController < ApplicationController
     if @choice = Choice.create(choice_params)
       @question = Question.find(params[:id], :params => {
         :with_user_stats => true,
-        :user_identifier => @survey_session.session_id
+        :visitor_identifier => @survey_session.session_id
       })
       @earl = Earl.find_by_question_id(params[:id])
 
@@ -1136,7 +1136,7 @@ class QuestionsController < ApplicationController
   def question_params_valid
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
-                                  'user_identifier' => @survey_session.session_id})
+                                  'visitor_identifier' => @survey_session.session_id})
       return true if @question.save
     else
       return false
@@ -1278,7 +1278,7 @@ class QuestionsController < ApplicationController
     new_photo = Photo.create(:image => params[:Filedata], :original_file_name => params[:Filedata].original_filename)
     if new_photo.valid?
       choice_params = {
-        :user_identifier => params[:session_identifier],
+        :visitor_identifier => params[:session_identifier],
         :data => new_photo.id,
         :question_id => @earl.question_id,
         :active => true
