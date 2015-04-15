@@ -19,11 +19,6 @@ class PromptsController < ApplicationController
       )
 
       next_prompt = Hash.from_xml(vote.body)['prompt']
-      Rails.logger.info("Prompts_Controller vote:")
-      Rails.logger.info(vote.body)
-      Rails.logger.info("Prompts_Controller vote: next prompt:")
-      Rails.logger.info(next_prompt)
-
       result = {
         :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
         :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_title'], :length => 140, :omission => '…')),
@@ -36,12 +31,9 @@ class PromptsController < ApplicationController
         :appearance_lookup => next_prompt['appearance_id'],
         :prompt_id         => next_prompt['id'],
       }
-      Rails.logger.info("Prompts_Controller vote: result:")
       Rails.logger.info(result)
 
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
@@ -86,8 +78,6 @@ class PromptsController < ApplicationController
         :message => t('vote.cant_decide_message')
       }
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       if wikipedia?
         # wikipedia ideas are prepended by a 4 character integer
@@ -154,8 +144,6 @@ class PromptsController < ApplicationController
         :message => t('vote.flag_complete_message')
       }
       @survey_session.appearance_lookup = result[:appearance_lookup]
-      logger.info("Next appearance lookup:")
-      logger.info(result[:appearance_lookup])
 
       result = add_photocracy_info(result, next_prompt, params[:question_id]) if @photocracy
       render :json => result.to_json
@@ -197,9 +185,6 @@ class PromptsController < ApplicationController
   end
 
   def get_object_request_options(params, request_type)
-    logger.info("get_object_request_options")
-    logger.info(params)
-    logger.info(request_type)
      options = { :visitor_identifier => @survey_session.user_id,
                  # use static value of 5 if in test, so we can mock resulting API queries
                  :time_viewed => (Rails.env == 'test') ? 5 : params[:time_viewed],
@@ -207,7 +192,6 @@ class PromptsController < ApplicationController
                  #CATH: this is to send the voter's user id to the API
                  :site_user_id => current_user.id 
      }
-     logger.info(options)
     if @survey_session.old_user_id
       options.merge!({:old_visitor_identifier => @survey_session.old_user_id})
     end

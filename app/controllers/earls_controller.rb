@@ -6,8 +6,6 @@ class EarlsController < ApplicationController
   before_filter :authenticate, :only => [:show]
 
   def show
-    logger.info("Earls controller show - prams")
-    logger.info(params)
     session[:welcome_msg] = @earl.welcome_message.blank? ? nil: @earl.welcome_message
     
     if @earl
@@ -41,9 +39,6 @@ class EarlsController < ApplicationController
       end
 
       
-      logger.info("Earls_Controller: @survey_session.appearance_lookup = @question.attributes[\"appearance_id\"]")
-      logger.info(@question.attributes)
-      logger.info(@question.attributes["appearance_id"])
       @survey_session.appearance_lookup = @question.attributes["appearance_id"]
 
       logger.info "inside questions#show " + @question.inspect
@@ -238,13 +233,3 @@ class EarlsController < ApplicationController
     end
   end
 end
-
-# @question = Question.find_by_name(params[:id]) #the question has a prompt id with it
-#  #logger.info "inside questions#show " + Question.find(@question.id).inspect
-#  @prompt = Prompt.find(@question.attributes['picked_prompt_id'], :params => {:question_id => @question.id})
-#  session[:current_prompt_id] = @question.attributes['picked_prompt_id']
-#  #@items = @question.items
-#  @right_choice_text = @prompt.right_choice_text
-#  @left_choice_text = @prompt.left_choice_text
-#  @item_count = @question.attributes['item_count']
-#  @votes_count = @question.attributes['votes_count']

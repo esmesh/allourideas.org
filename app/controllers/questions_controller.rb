@@ -1103,22 +1103,17 @@ class QuestionsController < ApplicationController
       File.delete(params['question']['url'] + ".xls")
     end
     
-    logger.info("questions_controller::create 1")
     logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url, :upload)}"
     #CATH: this is the object that is sent to the api somehow
     @question = Question.new(params[:question].slice(:name, :ideas, :url, :upload))
-    logger.info(" --- Created new question!")
     logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
                      :password => params[:question]['password'],
                      :password_confirmation => params[:question]['password']) unless signed_in?
-    logger.info(" --- Created new user!")
     if question_params_valid
       earl_options = {:question_id => @question.id, :name => params[:question]['url'].strip}
       earl_options.merge!(:flag_enabled => true, :photocracy => true) if @photocracy # flag is enabled by default for photocracy
-      logger.info("earls options merged")
       earl = current_user.earls.create(earl_options)
-      logger.info(" --- Created earls!")
       ClearanceMailer.delay.deliver_confirmation(current_user, earl.name, @photocracy)
       IdeaMailer.delay.deliver_extra_information(current_user, @question.name, params[:question]['information'], @photocracy) unless params[:question]["information"].blank?
       session[:standard_flash] = "#{t('questions.new.success_flash')}<br /> #{t('questions.new.success_flash2')}: <a href='#{@question.fq_earl}'>#{@question.fq_earl}</a> #{t('questions.new.success_flash3')}<br /> #{t('questions.new.success_flash4')}: <a href=\"#{@question.fq_earl}/admin\"> #{t('nav.manage_question')}</a>"
@@ -1134,8 +1129,8 @@ class QuestionsController < ApplicationController
   end
 
   def question_params_valid
-    logger.info("Questions Controller question_params_valid: @survey_session")
-    logger.info(@survey_session)
+    logger.info("Questions Controller question_params_valid: @survey_session.user_id")
+    logger.info(@survey_session.user_id)
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
                                   'visitor_identifier' => @survey_session.user_id})
