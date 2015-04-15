@@ -115,19 +115,24 @@ class ApplicationController < ActionController::Base
     logger.info(params)
     # First order of business is to set the question_id.
     set_question_id_earl
-
+    
     begin
-      # Based on the cookies, question_id, and appearance_lookup, find the
+      # Based on the cookies, question_id and appearance_lookup, find the
       # proper session for this request.
       session_data = SurveySession.find(cookies, @question_id, params[:appearance_lookup])
     rescue CantFindSessionFromCookies => e
-      # if no appearance_lookup, then we can safely create a new sesssion
+      # if no appearance_lookup, then we can safely create a new session
       # otherwise this request ought to fail as they are attempting some action
       # without the proper session being found
       if params[:appearance_lookup].nil?
-        logger.info ("Trying to create a new session from the @question_id:")
+        if !current_user.nil?
+          current_user_id = current_user.id
+        end
+        logger.info ("Trying to create a new session from the @question_id and current_user_id")
         logger.info(@question_id)
-        session_data = [{:question_id => @question_id }]
+        logger.info(current_user_id)
+        session_data = [{:question_id => @question_id, :user_id => current_user_id}]
+        logger.info("session_data:")
         logger.info(session_data)
       else
         logger.info ("appearance_lookup wasn't nil but cookie not found")

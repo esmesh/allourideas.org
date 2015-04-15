@@ -3,13 +3,13 @@ class SurveySession
   @@expire_time = 10.minutes
   @@cookie_prefix = "scispif_"
 
-  attr_reader :cookie_name, :old_session_id
+  attr_reader :cookie_name, :old_user_id
 
   def initialize(data, cookie_name=nil)
     Rails.logger.info("SurveySession initialize")
+    @data, @cookie_name = data, cookie_name
     Rails.logger.info(@data)
     Rails.logger.info(@cookie_name)
-    @data, @cookie_name = data, cookie_name
 
     # Clean up question_id to ensure it is either a positive integer or nil.
     if !@data.has_key?(:question_id)
@@ -21,6 +21,9 @@ class SurveySession
         raise QuestionIdIsNotPositiveInteger, "Question id must be positive integer or nil"
       end
       @data[:question_id] = q_id
+      if @data[:user_id].nil?
+        raise SessionHasNoUserId, "Survey sessions must be tied to a specific user if we have a question id."
+      end
     end
 
     if @cookie_name.nil?
@@ -44,6 +47,13 @@ class SurveySession
     Rails.logger.info(@data)
     Rails.logger.info(@cookie_name)
     @data[:session_id]
+  end
+
+  def user_id
+    Rails.logger.info("SurveySession user_id")
+    Rails.logger.info(@data)
+    Rails.logger.info(@cookie_name)
+    @data[:user_id]
   end
 
   def appearance_lookup
@@ -85,12 +95,12 @@ class SurveySession
     @data[:expiration_time] = @@expire_time.from_now.utc
   end
 
-  # Creates a new session_id, but saves the old session_id. This is useful for
-  # expired sessions where we want to send both new and old session_ids to
-  # pairwise.
+  # Save the user id as the "old user id". This is useful for
+  # expired sessions where we want to send both new and old ids to
+  # pairwise (ESM - this is leftover from when votes were tracked
+  # session by session instead of by user.).
   def regenerate
-    @old_session_id = @data[:session_id]
-    @data[:session_id] = generate_session_id
+    @old_user_id = @data[:user_id]
   end
 
   # Creates signed cookie data to prevent user tampering.
@@ -123,12 +133,15 @@ class SurveySession
         begin
           # Extract data from cookie in a way that ensures no user tampering.
           data = @@verifier.verify(cookies[cookie_name])
+
           # Safe guard against unexpected value of cookie data.
           raise CantFindSessionFromCookies, 'Data is not hash' if data.class != Hash
+
           # The question_id in the cookie_name could be altered by the user. To
           # protect against tampering, we verify the question_id in the cookie
           # value matches the one we're looking for.
           raise CantFindSessionFromCookies, 'Question ID did not match cookie name' if data[:question_id].to_i != question_id.to_i
+
           # If appearance_lookup is nil, we can return now because we've found
           # the first cookie that is match. There may be other matches, but we
           # have no way to determine which might be best. We always return the
@@ -169,6 +182,8 @@ end
 class CantFindSessionFromCookies < StandardError
 end
 class SessionHasNoQuestionId < StandardError
+end
+class SessionHasNoUserId < StandardError
 end
 class QuestionIdIsNotPositiveInteger < StandardError
 end

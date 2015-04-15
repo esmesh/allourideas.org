@@ -977,7 +977,7 @@ class QuestionsController < ApplicationController
       end
     end
 
-    choice_params = {:visitor_identifier => @survey_session.session_id,
+    choice_params = {:visitor_identifier => @survey_session.user_id,
       :data => new_idea_data,
       :title => new_idea_title,
       :question_id => params[:id]}
@@ -988,7 +988,7 @@ class QuestionsController < ApplicationController
     if @choice = Choice.create(choice_params)
       @question = Question.find(params[:id], :params => {
         :with_user_stats => true,
-        :visitor_identifier => @survey_session.session_id
+        :visitor_identifier => @survey_session.user_id
       })
       @earl = Earl.find_by_question_id(params[:id])
 
@@ -1134,9 +1134,11 @@ class QuestionsController < ApplicationController
   end
 
   def question_params_valid
+    logger.info("Questions Controller question_params_valid: @survey_session")
+    logger.info(@survey_session)
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
-                                  'visitor_identifier' => @survey_session.session_id})
+                                  'visitor_identifier' => @survey_session.user_id})
       return true if @question.save
     else
       return false
