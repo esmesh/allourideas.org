@@ -183,6 +183,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_num_ratings_by_creation_time
+      logger.info("scatter_num_ratings_by_creation_time")
       type = params[:type] # should be scatter_num_ratings_by_date_added
       @earl = Earl.find params[:id]
       @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
@@ -306,6 +307,7 @@ class QuestionsController < ApplicationController
   end
 
   def word_cloud
+    logger.info("word_cloud params = #{params}")
     @earl = Earl.find params[:id]
     type = params[:type]
 
@@ -316,6 +318,9 @@ class QuestionsController < ApplicationController
     min_val = nil
     @choices.each do|c|
       if c.data
+        logger.info("type=#{type}")
+        logger.info("c.user_created=#{c.user_created}")
+        logger.info("c.data=#{c.data}")
         if type && type.starts_with?("uploaded")
           unless c.user_created
             next
@@ -336,6 +341,7 @@ class QuestionsController < ApplicationController
         end
       end
     end
+    logger.info("@word_frequency=#{@word_frequency}")
 
     if !type || !type.starts_with?("uploaded")
       @word_frequency.delete_if { |word, score| score <= min_val}
@@ -367,6 +373,10 @@ class QuestionsController < ApplicationController
       format.html { render :layout => false }
       format.js
     end
+    
+    logger.info("@word_cloud_js = #{@word_cloud_js}")
+    logger.info("@word_cloud_end = #{@word_cloud_end}")
+    logger.info("@target_div = #{@target_div}")
   end
 
   def template_file
@@ -404,6 +414,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_plot_user_vs_seed_ideas
+    logger.info("scatter_num_ratings_by_creation_time")
     type = params[:type] # should be scatter_ideas
     @earl = Earl.find params[:id]
     @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
@@ -515,6 +526,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_votes_vs_skips
+    logger.info("scatter_votes_by_visitor")
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
     votes_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
@@ -577,6 +589,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_score_vs_votes
+    logger.info("scatter_score_vs_votes")
     @earl = Earl.find params[:id]
     @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
 
@@ -619,6 +632,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_votes_by_visitor
+    logger.info("scatter_votes_by_visitor")
     type = params[:type] 
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
@@ -697,6 +711,7 @@ class QuestionsController < ApplicationController
   end
 
   def timeline_graph
+    logger.info("timeline_graph")
     totals = params[:totals]
     type = params[:type] || 'votes'
 
@@ -820,6 +835,7 @@ class QuestionsController < ApplicationController
   def density_graph
     @earl = Earl.find params[:id]
     @densities = Density.find(:all, :params=> {:question_id => @earl.question_id})
+    logger.info("@densities: #{@densities}")
 
     type = params[:type]
 
@@ -894,6 +910,7 @@ class QuestionsController < ApplicationController
   end
 
   def choices_by_creation_date
+    logger.info("choices_by_creation_date")
     #authenticate admin only
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
@@ -1308,6 +1325,7 @@ class QuestionsController < ApplicationController
   end
 
   def user_voting_history
+    logger.info("user_voting_history")
     @votes = Session.new(:id => @survey_session.session_id).get(:votes, :question_id => params[:id])
 
     if @photocracy
