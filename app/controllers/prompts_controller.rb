@@ -23,7 +23,6 @@ class PromptsController < ApplicationController
       Rails.logger.info(vote.body)
       Rails.logger.info("Prompts_Controller vote: next prompt:")
       Rails.logger.info(next_prompt)
-
       result = {
         :newleft           => CGI::escapeHTML(truncate(next_prompt['left_choice_title'], :length => 140, :omission => '…')),
         :newright          => CGI::escapeHTML(truncate(next_prompt['right_choice_title'], :length => 140, :omission => '…')),
@@ -36,8 +35,6 @@ class PromptsController < ApplicationController
         :appearance_lookup => next_prompt['appearance_id'],
         :prompt_id         => next_prompt['id'],
       }
-      Rails.logger.info("Prompts_Controller vote: result:")
-      Rails.logger.info(result)
 
       @survey_session.appearance_lookup = result[:appearance_lookup]
 
@@ -116,7 +113,7 @@ class PromptsController < ApplicationController
     @choice.prefix_options[:question_id] = question_id
 
     c = @choice.put(:flag,
-                    :visitor_identifier => @survey_session.session_id,
+                    :visitor_identifier => @survey_session.user_id,
                     :explanation => reason)
 
     new_choice = Crack::XML.parse(c.body)['choice']
@@ -172,7 +169,7 @@ class PromptsController < ApplicationController
     future_right_photo = Photo.find(next_prompt['future_right_choice_title_1'])
 
     result.merge!({
-      :visitor_votes        => next_prompt['visitor_votes'],
+      :user_votes        => next_prompt['user_votes'],
       :newright_photo       => newright_photo.image.url(:medium),
       :newright_photo_thumb => newright_photo.image.url(:thumb),
       :newleft_photo        => newleft_photo.image.url(:medium),
@@ -191,15 +188,15 @@ class PromptsController < ApplicationController
   end
 
   def get_object_request_options(params, request_type)
-     options = { :visitor_identifier => @survey_session.session_id,
+     options = { :visitor_identifier => @survey_session.user_id,
                  # use static value of 5 if in test, so we can mock resulting API queries
                  :time_viewed => (Rails.env == 'test') ? 5 : params[:time_viewed],
                  :appearance_lookup => params[:appearance_lookup],
                  #CATH: this is to send the voter's user id to the API
                  :site_user_id => current_user.id 
      }
-    if @survey_session.old_session_id
-      options.merge!({:old_visitor_identifier => @survey_session.old_session_id})
+    if @survey_session.old_user_id
+      options.merge!({:old_visitor_identifier => @survey_session.old_user_id})
     end
      case request_type
        when :vote
@@ -223,8 +220,8 @@ class PromptsController < ApplicationController
 
   def get_next_prompt_options
     next_prompt_params = { :with_appearance => true,
-                            :with_visitor_stats => true,
-                            :visitor_identifier => @survey_session.session_id
+                            :with_user_stats => true,
+                            :visitor_identifier => @survey_session.user_id
                           }
     next_prompt_params.merge!(:future_prompts => {:number => 1}) if @photocracy
     next_prompt_params

@@ -27,8 +27,8 @@ class EarlsController < ApplicationController
       
       show_params = {:with_prompt => true, 
 		     :with_appearance => true, 
-		     :with_visitor_stats => true,
-		     :visitor_identifier => @survey_session.session_id}
+		     :with_user_stats => true,
+		     :visitor_identifier => @survey_session.user_id}
 
       show_params.merge!({:future_prompts => {:number => 1}, :with_average_votes => true}) if @photocracy
 
@@ -44,6 +44,8 @@ class EarlsController < ApplicationController
       logger.info(@question.attributes)
       logger.info(@question.attributes["appearance_id"])
       @survey_session.appearance_lookup = @question.attributes["appearance_id"]
+
+      logger.info "inside questions#show " + @question.inspect
 
        # we can probably make this into one api call
        @prompt = Prompt.find(@question.attributes['picked_prompt_id'], :params => {:question_id => @question.id})
@@ -235,13 +237,3 @@ class EarlsController < ApplicationController
     end
   end
 end
-
-# @question = Question.find_by_name(params[:id]) #the question has a prompt id with it
-#  #logger.info "inside questions#show " + Question.find(@question.id).inspect
-#  @prompt = Prompt.find(@question.attributes['picked_prompt_id'], :params => {:question_id => @question.id})
-#  session[:current_prompt_id] = @question.attributes['picked_prompt_id']
-#  #@items = @question.items
-#  @right_choice_text = @prompt.right_choice_text
-#  @left_choice_text = @prompt.left_choice_text
-#  @item_count = @question.attributes['item_count']
-#  @votes_count = @question.attributes['votes_count']

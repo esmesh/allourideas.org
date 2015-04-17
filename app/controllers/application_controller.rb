@@ -93,7 +93,7 @@ class ApplicationController < ActionController::Base
     elsif controller_name == 'prompts'
       @question_id = params[:question_id]
     elsif controller_name == 'questions'
-      if ['add_idea', 'visitor_voting_history'].include?(action_name)
+      if ['add_idea', 'user_voting_history'].include?(action_name)
         @question_id = params[:id]
       elsif ['results', 'about', 'admin', 'update_name'].include?(action_name)
         @earl = Earl.find_by_name(params[:id])
@@ -115,17 +115,23 @@ class ApplicationController < ActionController::Base
     logger.info(params)
     # First order of business is to set the question_id.
     set_question_id_earl
-
+    
     begin
-      # Based on the cookies, question_id, and appearance_lookup, find the
+      # Based on the cookies, question_id and appearance_lookup, find the
       # proper session for this request.
       session_data = SurveySession.find(cookies, @question_id, params[:appearance_lookup])
     rescue CantFindSessionFromCookies => e
-      # if no appearance_lookup, then we can safely create a new sesssion
+      # if no appearance_lookup, then we can safely create a new session
       # otherwise this request ought to fail as they are attempting some action
       # without the proper session being found
       if params[:appearance_lookup].nil?
-        session_data = [{:question_id => @question_id }]
+        if !current_user.nil?
+          current_user_id = current_user.id
+        end
+        logger.info ("Trying to create a new session from the @question_id and current_user_id")
+        session_data = [{:question_id => @question_id, :user_id => current_user_id}]
+        logger.info("session_data:")
+        logger.info(session_data)
       else
         raise e
       end
@@ -160,23 +166,23 @@ class ApplicationController < ActionController::Base
     logger.info("AppController record_action - params")
     logger.info(params)
     logger.info("record_action")
-    visitor_remember_token = cookies[:visitor_remember_token]
+    user_remember_token = cookies[:user_remember_token]
 
-    unless visitor_remember_token
-	  visitor_remember_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand(10**10)}--")
+    unless user_remember_token
+	  user_remember_token = Digest::SHA1.hexdigest("--#{Time.now.utc}--#{rand(10**10)}--")
 
-          cookies[:visitor_remember_token] = {
-            :value   => visitor_remember_token, 
+          cookies[:user_remember_token] = {
+            :value   => user_remember_token, 
             :expires => 10.years.from_now.utc
           }
     end
 
-    visitor = Visitor.find_or_create_by_remember_token(:remember_token => visitor_remember_token)
+    user = User.find_or_create_by_remember_token(:remember_token => user_remember_token)
     user_session = SessionInfo.find_or_create_by_session_id(:session_id => @survey_session.session_id,
 						       :ip_addr => request.remote_ip,
 						       :user_agent => request.env["HTTP_USER_AGENT"],
 						       :white_label_request => white_label_request?, 
-						       :visitor_id => visitor.id)
+						       :user_id => user.id)
     @user_session = user_session
 
     sql = ActiveRecord::Base.send(:sanitize_sql_array, ["INSERT INTO `clicks` (`url`, `controller`, `action`, `user_id`, `referrer`, `session_info_id`, `created_at`, `updated_at`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", request.url, controller_name, action_name, current_user.try(:id), request.referrer, user_session.try(:id), Time.now.utc, Time.now.utc])

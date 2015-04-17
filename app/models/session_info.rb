@@ -3,7 +3,6 @@ class SessionInfo< ActiveRecord::Base
   serialize :loc_info_2
   has_many :trials
   has_many :clicks
-  belongs_to :visitor
   belongs_to :user
 
   after_create :do_geolocate

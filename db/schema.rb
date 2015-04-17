@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140828214907) do
+ActiveRecord::Schema.define(:version => 20150413192405) do
 
   create_table "ages", :force => true do |t|
     t.datetime "created_at"
@@ -176,12 +176,21 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "white_label_request"
-    t.integer  "visitor_id"
     t.integer  "user_id"
     t.string   "loc_info_2",          :default => ""
   end
 
   add_index "session_infos", ["session_id"], :name => "index_session_infos_on_session_id"
+
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
 
   create_table "slugs", :force => true do |t|
     t.string   "name"
@@ -229,7 +238,7 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
     t.string   "encrypted_password",           :limit => 128
     t.string   "salt",                         :limit => 128
     t.string   "confirmation_token",           :limit => 128
-    t.string   "remember_token",               :limit => 128
+    t.string   "remember_token",               :limit => 128, :default => ""
     t.boolean  "email_confirmed",                             :default => false, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -255,13 +264,5 @@ ActiveRecord::Schema.define(:version => 20140828214907) do
   add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["id", "confirmation_token"], :name => "index_users_on_id_and_confirmation_token"
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"
-
-  create_table "visitors", :force => true do |t|
-    t.string   "remember_token", :default => ""
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "visitors", ["remember_token"], :name => "index_visitors_on_remember_token"
 
 end

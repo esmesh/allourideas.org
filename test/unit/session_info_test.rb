@@ -3,7 +3,6 @@ require 'test_helper'
 class SessionInfoTest < ActiveSupport::TestCase
   should_have_many :trials
   should_have_many :alternatives, :through => :trials
-  should_belong_to :visitor
   should_have_many :clicks
   should_belong_to :user
 

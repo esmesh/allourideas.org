@@ -6,11 +6,11 @@
 # no regular words or you'll be exposed to dictionary attacks.
 
 ActionController::Base.session = {
-  :key => "_allourideas_ey__session_#{RAILS_ENV}",
+  :key => "_scispif_ey__session_#{RAILS_ENV}",
   :secret      => APP_CONFIG[:BASE_SESSION_SECRET]
 }
 
 # Use the database for sessions instead of the cookie-based default,
 # which shouldn't be used to store highly confidential information
 # (create the session table with "rake db:sessions:create")
-# ActionController::Base.session_store = :active_record_store
+ActionController::Base.session_store = :active_record_store

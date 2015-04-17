@@ -157,28 +157,28 @@
 
             .accordion-group
               .accordion-heading
-                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#votes_per_session"}
-                  = link_to("View number of votes per session (super-admin only)", url_for(:action => :scatter_votes_by_session, :type => "votes"), :"data-preventDefault" => true)
+                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#votes_per_visitor"}
+                  = link_to("View number of votes per visitor (super-admin only)", url_for(:action => :scatter_votes_by_visitor, :type => "votes"), :"data-preventDefault" => true)
                   %button.close.hide x
-              #votes_per_session.accordion-body.collapse
+              #votes_per_visitor.accordion-body.collapse
                 .accordion-inner
                   = image_tag('indicator.gif')
 
             .accordion-group
               .accordion-heading
-                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#skips_per_session"}
-                  = link_to("View number of skips per session (super-admin only)", url_for(:action => :scatter_votes_by_session, :type => "skips"), :"data-preventDefault" => true)
+                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#skips_per_visitor"}
+                  = link_to("View number of skips per visitor (super-admin only)", url_for(:action => :scatter_votes_by_visitor, :type => "skips"), :"data-preventDefault" => true)
                   %button.close.hide x
-              #skips_per_session.accordion-body.collapse
+              #skips_per_visitor.accordion-body.collapse
                 .accordion-inner
                   = image_tag('indicator.gif')
 
             .accordion-group
               .accordion-heading
-                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#votes_skips_per_session"}
-                  = link_to("View number of votes vs number of skips per session (super-admin only)", url_for(:action => :scatter_votes_vs_skips, :type => "skips"), :"data-preventDefault" => true)
+                .accordion-toggle{:"data-toggle" => 'collapse', :"data-target" => "#votes_skips_per_visitor"}
+                  = link_to("View number of votes vs number of skips per visitor (super-admin only)", url_for(:action => :scatter_votes_vs_skips, :type => "skips"), :"data-preventDefault" => true)
                   %button.close.hide x
-              #votes_skips_per_session.accordion-body.collapse
+              #votes_skips_per_visitor.accordion-body.collapse
                 .accordion-inner
                   = image_tag('indicator.gif')
 

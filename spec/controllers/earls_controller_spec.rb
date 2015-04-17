@@ -13,11 +13,11 @@ describe EarlsController do
         question = Factory.build(:question, :id => 1, :picked_prompt_id => 1).attributes.to_xml(:root => 'question')
         prompt   = Factory.build(:prompt, :id => 1).attributes.to_xml(:root => 'prompt')
         prompt2  = Factory.build(:prompt, :id => 2).attributes.to_xml(:root => 'prompt')
-        mock.get "/questions/1.xml?visitor_identifier=test123&with_appearance=true&with_prompt=true&with_visitor_stats=true", {}, question, 200
-        mock.get "/questions/1.xml?visitor_identifier=1234567890&with_appearance=true&with_prompt=true&with_visitor_stats=true", {}, question, 200
-        mock.get "/questions/1.xml?visitor_identifier=test123&with_appearance=true&with_average_votes=true&with_prompt=true&with_visitor_stats=true", {}, question, 200
+        mock.get "/questions/1.xml?visitor_identifier=test123&with_appearance=true&with_prompt=true&with_user_stats=true", {}, question, 200
+        mock.get "/questions/1.xml?visitor_identifier=1234567890&with_appearance=true&with_prompt=true&with_user_stats=true", {}, question, 200
+        mock.get "/questions/1.xml?visitor_identifier=test123&with_appearance=true&with_average_votes=true&with_prompt=true&with_user_stats=true", {}, question, 200
         mock.get "/questions/1/prompts/1.xml", {}, prompt, 200
-        mock.post "/questions/1/prompts/1/vote.xml?next_prompt%5Bvisitor_identifier%5D=test123&next_prompt%5Bwith_appearance%5D=true&next_prompt%5Bwith_visitor_stats%5D=true&question_id=1&vote%5Bappearance_lookup%5D=f72da54add43e5ca39cab80f1c72f0e7&vote%5Bdirection%5D=left&vote%5Bskip_fraud_protection%5D=true&vote%5Btime_viewed%5D=5&vote%5Btracking%5D%5Bx_click_offset%5D=&vote%5Btracking%5D%5By_click_offset%5D=&vote%5Bvisitor_identifier%5D=test123", {}, prompt2, 200
+        mock.post "/questions/1/prompts/1/vote.xml?next_prompt%5Bvisitor_identifier%5D=test123&next_prompt%5Bwith_appearance%5D=true&next_prompt%5Bwith_user_stats%5D=true&question_id=1&vote%5Bappearance_lookup%5D=f72da54add43e5ca39cab80f1c72f0e7&vote%5Bdirection%5D=left&vote%5Bskip_fraud_protection%5D=true&vote%5Btime_viewed%5D=5&vote%5Btracking%5D%5Bx_click_offset%5D=&vote%5Btracking%5D%5By_click_offset%5D=&vote%5Bvisitor_identifier%5D=test123", {}, prompt2, 200
       end
       @earl = Factory.create(:earl)
     end
@@ -37,7 +37,7 @@ describe EarlsController do
     end
 
     it "assigns a new session if the session has been tampered" do
-      cookiename = "aoi_#{@earl.question_id}_1234"
+      cookiename = "scispif_#{@earl.question_id}_1234"
       new_sess = SurveySession.new({:question_id => @earl.question_id}, cookiename)
       @request.cookies[new_sess.cookie_name] = new_sess.cookie_value + 'TAMPER'
       get(:show, {:id => @earl.name}, {:session_id => nil})
@@ -49,7 +49,7 @@ describe EarlsController do
     end
 
     it "sets a survey session cookie with the right data when passed a cookie" do
-      cookiename = "aoi_#{@earl.question_id}_1234"
+      cookiename = "scispif_#{@earl.question_id}_1234"
       session_id = '1234567890'
       new_sess = SurveySession.new({:question_id => @earl.question_id, :session_id => session_id }, cookiename)
       @request.cookies[new_sess.cookie_name] = new_sess.cookie_value

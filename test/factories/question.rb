@@ -9,8 +9,8 @@ Factory.define :question do |q|
   q.appearance_id "f72da54add43e5ca39cab80f1c72f0e7"
   q.picked_prompt_id "1"
   q.it_should_autoactivate_ideas true
-  q.visitor_ideas "0"
-  q.visitor_votes "0"
+  q.user_ideas "0"
+  q.user_votes "0"
   q.inactive_choices_count 2
   q.information nil
   q.votes_count 1030

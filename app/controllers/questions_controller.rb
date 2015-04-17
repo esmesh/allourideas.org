@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   include ActionView::Helpers::TextHelper
   require 'crack'
   require 'geokit'
-  before_filter :authenticate, :only => [:new, :admin, :toggle, :toggle_autoactivate, :update, :delete_logo, :export, :add_photos, :update_name]
+  before_filter :authenticate, :only => [:new, :admin, :toggle, :toggle_autoactivate, :update, :delete_logo, :export, :add_photos, :update_name, :create]
   before_filter :admin_only, :only => [:index, :admin_stats, :new]
   #caches_page :results
 
@@ -24,7 +24,7 @@ class QuestionsController < ApplicationController
     response = {
       "vote_rate" => question.get(:vote_rate)["voterate"].try(:round, 3),
       "upload_to_participation_rate" => question.get(:upload_to_participation_rate)["uploadparticipationrate"].try(:round, 3),
-      "median_responses_per_session" => question.get(:median_responses_per_session)["median"],
+      "median_responses_per_visitor" => question.get(:median_responses_per_visitor)["median"],
       "votes_per_uploaded_choice" => question.get(:votes_per_uploaded_choice)["value"].try(:round, 3)
     }
     respond_to do |format|
@@ -183,6 +183,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_num_ratings_by_creation_time
+      logger.info("scatter_num_ratings_by_creation_time")
       type = params[:type] # should be scatter_num_ratings_by_date_added
       @earl = Earl.find params[:id]
       @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
@@ -306,6 +307,7 @@ class QuestionsController < ApplicationController
   end
 
   def word_cloud
+    logger.info("word_cloud params = #{params}")
     @earl = Earl.find params[:id]
     type = params[:type]
 
@@ -316,6 +318,9 @@ class QuestionsController < ApplicationController
     min_val = nil
     @choices.each do|c|
       if c.data
+        logger.info("type=#{type}")
+        logger.info("c.user_created=#{c.user_created}")
+        logger.info("c.data=#{c.data}")
         if type && type.starts_with?("uploaded")
           unless c.user_created
             next
@@ -336,6 +341,7 @@ class QuestionsController < ApplicationController
         end
       end
     end
+    logger.info("@word_frequency=#{@word_frequency}")
 
     if !type || !type.starts_with?("uploaded")
       @word_frequency.delete_if { |word, score| score <= min_val}
@@ -367,6 +373,10 @@ class QuestionsController < ApplicationController
       format.html { render :layout => false }
       format.js
     end
+    
+    logger.info("@word_cloud_js = #{@word_cloud_js}")
+    logger.info("@word_cloud_end = #{@word_cloud_end}")
+    logger.info("@target_div = #{@target_div}")
   end
 
   def template_file
@@ -404,6 +414,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_plot_user_vs_seed_ideas
+    logger.info("scatter_num_ratings_by_creation_time")
     type = params[:type] # should be scatter_ideas
     @earl = Earl.find params[:id]
     @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
@@ -515,20 +526,21 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_votes_vs_skips
+    logger.info("scatter_votes_by_visitor")
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'votes'))
+    votes_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
 
-    skips_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'skips'))
+    skips_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
     chart_data = []
     max_x = 0
     max_y = 0
-    votes_by_sids.each do |sid, votes|
+    votes_by_uids.each do |sid, votes|
       point = {}
       point[:x] = votes
       max_x = votes.to_i if votes.to_i > max_x
-      if skips = skips_by_sids.delete(sid)
+      if skips = skips_by_uids.delete(sid)
         point[:y] = skips
         max_y = skips.to_i if skips.to_i > max_y
       else
@@ -539,7 +551,7 @@ class QuestionsController < ApplicationController
       chart_data << point
     end
     # if any sids remain, they have not voted
-    skips_by_sids.each do |sid, skips|
+    skips_by_uids.each do |sid, skips|
       point = {}
       point[:x] = 0
       point[:y] = skips
@@ -577,6 +589,7 @@ class QuestionsController < ApplicationController
   end
 
   def scatter_score_vs_votes
+    logger.info("scatter_score_vs_votes")
     @earl = Earl.find params[:id]
     @choices = Choice.find(:all, :params => {:question_id => @earl.question_id})
 
@@ -618,35 +631,36 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def scatter_votes_by_session
+  def scatter_votes_by_visitor
+    logger.info("scatter_votes_by_visitor")
     type = params[:type] 
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
 
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'votes'))
-    bounces_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'bounces'))
+    votes_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
+    bounces_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'bounces'))
 
-    if bounces_by_sids != "\n"
+    if bounces_by_uids != "\n"
       bounce_hash = {}
-      bounces_by_sids.each do |k|
+      bounces_by_uids.each do |k|
         bounce_hash[k] = 0
       end
-      votes_by_sids.merge!(bounce_hash)
+      votes_by_uids.merge!(bounce_hash)
     end
 
     case type
     when "votes"
-      objects_by_sids = votes_by_sids
+      objects_by_uids = votes_by_uids
 
     when "skips"
-      skips_by_sids = object_info_to_hash(@question.get(:object_info_by_visitor_id, :object_type => 'skips'))
+      skips_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
-      skips_by_sids.each do |k,v|
-        votes_by_sids.delete(k)
+      skips_by_uids.each do |k,v|
+        votes_by_uids.delete(k)
       end
 
-      no_skips_size = votes_by_sids.size
-      objects_by_sids = skips_by_sids
+      no_skips_size = votes_by_uids.size
+      objects_by_uids = skips_by_uids
     end
 
     chart_data = []
@@ -654,7 +668,7 @@ class QuestionsController < ApplicationController
 
     jitter_const = 1
     max = 0
-    objects_by_sids.sort { |a,b| a[1].to_i <=> b[1].to_i}.each do |sid, votes|
+    objects_by_uids.sort { |a,b| a[1].to_i <=> b[1].to_i}.each do |sid, votes|
       point = {}
       point[:x] = votes
       max = votes.to_i if votes.to_i > max
@@ -669,7 +683,7 @@ class QuestionsController < ApplicationController
 
     tooltipformatter = "function() { return '<b>' + this.x + ' #{type.titleize} </b>' ; }"
     @votes_chart = Highchart.scatter({
-      :chart => { :renderTo => "scatter_#{type}_by_session-chart-container",
+      :chart => { :renderTo => "scatter_#{type}_by_visitor-chart-container",
         :margin => [50, 25, 60, 50],
         :borderColor =>  '#919191',
         :borderWidth =>  '1',
@@ -691,12 +705,13 @@ class QuestionsController < ApplicationController
 
     })
     respond_to do |format|
-      format.html { render :text => "<div id='scatter_#{type}_by_session-chart-container'></div><script>#{@votes_chart}</script>" }
+      format.html { render :text => "<div id='scatter_#{type}_by_visitor-chart-container'></div><script>#{@votes_chart}</script>" }
       format.js { render :text => @votes_chart }
     end
   end
 
   def timeline_graph
+    logger.info("timeline_graph")
     totals = params[:totals]
     type = params[:type] || 'votes'
 
@@ -742,7 +757,7 @@ class QuestionsController < ApplicationController
       if totals == "true"
         chart_title = t('results.number_of') +  t('common.users').titleize + t('results.per_day')
         y_axis_title = t('results.number_of') + t('common.users')
-        result = SessionInfo.find(:all, :select => 'date(created_at) as date, visitor_id, count(*) as session_id_count', :group => 'date(created_at), visitor_id')
+        result = SessionInfo.find(:all, :select => 'date(created_at) as date, user_id, count(*) as session_id_count', :group => 'date(created_at), user_id')
         votes_count_hash = Hash.new(0)
 
         result.each do |r|
@@ -820,6 +835,7 @@ class QuestionsController < ApplicationController
   def density_graph
     @earl = Earl.find params[:id]
     @densities = Density.find(:all, :params=> {:question_id => @earl.question_id})
+    logger.info("@densities: #{@densities}")
 
     type = params[:type]
 
@@ -894,6 +910,7 @@ class QuestionsController < ApplicationController
   end
 
   def choices_by_creation_date
+    logger.info("choices_by_creation_date")
     #authenticate admin only
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
@@ -977,7 +994,7 @@ class QuestionsController < ApplicationController
       end
     end
 
-    choice_params = {:visitor_identifier => @survey_session.session_id,
+    choice_params = {:visitor_identifier => @survey_session.user_id,
       :data => new_idea_data,
       :title => new_idea_title,
       :question_id => params[:id]}
@@ -987,8 +1004,8 @@ class QuestionsController < ApplicationController
 
     if @choice = Choice.create(choice_params)
       @question = Question.find(params[:id], :params => {
-        :with_visitor_stats => true,
-        :visitor_identifier => @survey_session.session_id
+        :with_user_stats => true,
+        :visitor_identifier => @survey_session.user_id
       })
       @earl = Earl.find_by_question_id(params[:id])
 
@@ -1103,22 +1120,21 @@ class QuestionsController < ApplicationController
       File.delete(params['question']['url'] + ".xls")
     end
     
-    logger.info("questions_controller::create 1")
     logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url, :upload)}"
     #CATH: this is the object that is sent to the api somehow
     @question = Question.new(params[:question].slice(:name, :ideas, :url, :upload))
-    logger.info(" --- Created new question!")
+    logger.info "Already signed in == #{signed_in?}"
+    if signed_in?
+      logger.info "Current user is #{current_user.id}"
+    end
     logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
                      :password => params[:question]['password'],
                      :password_confirmation => params[:question]['password']) unless signed_in?
-    logger.info(" --- Created new user!")
     if question_params_valid
       earl_options = {:question_id => @question.id, :name => params[:question]['url'].strip}
       earl_options.merge!(:flag_enabled => true, :photocracy => true) if @photocracy # flag is enabled by default for photocracy
-      logger.info("earls options merged")
       earl = current_user.earls.create(earl_options)
-      logger.info(" --- Created earls!")
       ClearanceMailer.delay.deliver_confirmation(current_user, earl.name, @photocracy)
       IdeaMailer.delay.deliver_extra_information(current_user, @question.name, params[:question]['information'], @photocracy) unless params[:question]["information"].blank?
       session[:standard_flash] = "#{t('questions.new.success_flash')}<br /> #{t('questions.new.success_flash2')}: <a href='#{@question.fq_earl}'>#{@question.fq_earl}</a> #{t('questions.new.success_flash3')}<br /> #{t('questions.new.success_flash4')}: <a href=\"#{@question.fq_earl}/admin\"> #{t('nav.manage_question')}</a>"
@@ -1134,9 +1150,22 @@ class QuestionsController < ApplicationController
   end
 
   def question_params_valid
+    logger.info("Questions Controller question_params_valid: @survey_session.user_id")
+    logger.info(@survey_session.user_id)
+    if @survey_session.user_id.nil? && signed_in?
+      # Save the user id attached to this session if needed....
+      # TODO ESM - why isn't this done already??
+      @survey_session.user_id = current_user.id
+      logger.info("Question Controller question_params_valid: save @user.id to @survey_session : #{@survey_session.user_id}")
+    else
+      if @survey_session.user_id.nil?
+        logger.error "Can't figure out a user ID to create this question."
+        return false
+      end
+    end
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
-                                  'visitor_identifier' => @survey_session.session_id})
+                                  'visitor_identifier' => @survey_session.user_id})
       return true if @question.save
     else
       return false
@@ -1278,7 +1307,7 @@ class QuestionsController < ApplicationController
     new_photo = Photo.create(:image => params[:Filedata], :original_file_name => params[:Filedata].original_filename)
     if new_photo.valid?
       choice_params = {
-        :visitor_identifier => params[:session_identifier],
+        :visitor_identifier => params[:user_id],
         :data => new_photo.id,
         :question_id => @earl.question_id,
         :active => true
@@ -1295,7 +1324,8 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def visitor_voting_history
+  def user_voting_history
+    logger.info("user_voting_history")
     @votes = Session.new(:id => @survey_session.session_id).get(:votes, :question_id => params[:id])
 
     if @photocracy
@@ -1350,7 +1380,7 @@ class QuestionsController < ApplicationController
     def object_info_to_hash(array)
       hash = {}
       array.each do |a|
-        hash[a["visitor_id"]] = a["count"]
+        hash[a["user_id"]] = a["count"]
       end
       return hash
     end
