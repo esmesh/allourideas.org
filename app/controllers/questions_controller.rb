@@ -4,7 +4,7 @@ class QuestionsController < ApplicationController
   include ActionView::Helpers::TextHelper
   require 'crack'
   require 'geokit'
-  before_filter :authenticate, :only => [:new, :admin, :toggle, :toggle_autoactivate, :update, :delete_logo, :export, :add_photos, :update_name]
+  before_filter :authenticate, :only => [:new, :admin, :toggle, :toggle_autoactivate, :update, :delete_logo, :export, :add_photos, :update_name, :create]
   before_filter :admin_only, :only => [:index, :admin_stats, :new]
   #caches_page :results
 
@@ -1106,6 +1106,10 @@ class QuestionsController < ApplicationController
     logger.info "Create new question with params #{params[:question].slice(:name, :ideas, :url, :upload)}"
     #CATH: this is the object that is sent to the api somehow
     @question = Question.new(params[:question].slice(:name, :ideas, :url, :upload))
+    logger.info "Already signed in == #{signed_in?}"
+    if signed_in?
+      logger.info "Current user is #{current_user.id}"
+    end
     logger.info "Create new user with params #{params[:question].slice(:email, :password)}"
     @user = User.new(:email => params[:question]['email'],
                      :password => params[:question]['password'],
@@ -1131,6 +1135,17 @@ class QuestionsController < ApplicationController
   def question_params_valid
     logger.info("Questions Controller question_params_valid: @survey_session.user_id")
     logger.info(@survey_session.user_id)
+    if @survey_session.user_id.nil? && signed_in?
+      # Save the user id attached to this session if needed....
+      # TODO ESM - why isn't this done already??
+      @survey_session.user_id = current_user.id
+      logger.info("Question Controller question_params_valid: save @user.id to @survey_session : #{@survey_session.user_id}")
+    else
+      if @survey_session.user_id.nil?
+        logger.error "Can't figure out a user ID to create this question."
+        return false
+      end
+    end
     if @question.valid?(@photocracy) && (signed_in? || (@user.valid? && @user.save && sign_in(@user)))
       @question.attributes.merge!({'local_identifier' => current_user.id,
                                   'visitor_identifier' => @survey_session.user_id})
@@ -1275,7 +1290,7 @@ class QuestionsController < ApplicationController
     new_photo = Photo.create(:image => params[:Filedata], :original_file_name => params[:Filedata].original_filename)
     if new_photo.valid?
       choice_params = {
-        :visitor_identifier => params[:session_identifier],
+        :visitor_identifier => params[:user_id],
         :data => new_photo.id,
         :question_id => @earl.question_id,
         :active => true

@@ -47,6 +47,11 @@ class SurveySession
     @data[:user_id]
   end
 
+  def user_id=(user_id)
+    @data[:user_id] = user_id
+  end
+
+
   def appearance_lookup
     @data[:appearance_lookup]
   end
