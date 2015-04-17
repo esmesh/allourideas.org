@@ -40,7 +40,7 @@
                   = image_tag('ajax-loader.gif')
                 %td{"data-stats-key" => "upload_to_participation_rate"}
                   = image_tag('ajax-loader.gif')
-                %td{"data-stats-key" => "median_responses_per_session"}
+                %td{"data-stats-key" => "median_responses_per_visitor"}
                   = image_tag('ajax-loader.gif')
                 %td{"data-stats-key" => "votes_per_uploaded_choice"}
                   = image_tag('ajax-loader.gif')
@@ -108,21 +108,21 @@
     %button.close{:"data-dismiss" => "modal"}x
     %h2 Vote Rate
   .modal-body
-    %p The vote rate is defined as the number of sessions with at least one vote divided by total number of sessions. The range of possible values is from 0 - 1.
+    %p The vote rate is defined as the number of voters with at least one vote on this question divided by total number of participants across all questions (at least one vote, skip, or uploaded idea). The range of possible values is from 0 - 1.
 
 #upload-participation-rate.hide.modal.fade
   .modal-header
     %button.close{:"data-dismiss" => "modal"}x
     %h2 Upload to Participation Rate
   .modal-body
-    %p This rate is defined as the number of sessions with at least one upload divided by the total number of sessions with some active participation (at least one vote, skip, or uploaded idea). The range of possible values is from 0 - 1.
+    %p This rate is defined as the number of voters with at least one upload for this question divided by the total number of participants across all questions (at least one vote, skip, or uploaded idea). The range of possible values is from 0 - 1.
 
 #median-responses-session.hide.modal.fade
   .modal-header
     %button.close{:"data-dismiss" => "modal"}x
     %h2 Median Responses per Session
   .modal-body
-    %p This shows the median number of responses per session. A response can be a vote or a skip. The range of possible values is from 0 - ∞.
+    %p This shows the median number of responses per voter for this question. A response can be a vote or a skip. The range of possible values is from 0 - ∞.
 
 #votes-uploaded-choice.hide.modal.fade
   .modal-header

@@ -24,7 +24,7 @@ class QuestionsController < ApplicationController
     response = {
       "vote_rate" => question.get(:vote_rate)["voterate"].try(:round, 3),
       "upload_to_participation_rate" => question.get(:upload_to_participation_rate)["uploadparticipationrate"].try(:round, 3),
-      "median_responses_per_session" => question.get(:median_responses_per_session)["median"],
+      "median_responses_per_visitor" => question.get(:median_responses_per_visitor)["median"],
       "votes_per_uploaded_choice" => question.get(:votes_per_uploaded_choice)["value"].try(:round, 3)
     }
     respond_to do |format|
@@ -517,18 +517,18 @@ class QuestionsController < ApplicationController
   def scatter_votes_vs_skips
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
+    votes_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
 
-    skips_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
+    skips_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
     chart_data = []
     max_x = 0
     max_y = 0
-    votes_by_sids.each do |sid, votes|
+    votes_by_uids.each do |sid, votes|
       point = {}
       point[:x] = votes
       max_x = votes.to_i if votes.to_i > max_x
-      if skips = skips_by_sids.delete(sid)
+      if skips = skips_by_uids.delete(sid)
         point[:y] = skips
         max_y = skips.to_i if skips.to_i > max_y
       else
@@ -539,7 +539,7 @@ class QuestionsController < ApplicationController
       chart_data << point
     end
     # if any sids remain, they have not voted
-    skips_by_sids.each do |sid, skips|
+    skips_by_uids.each do |sid, skips|
       point = {}
       point[:x] = 0
       point[:y] = skips
@@ -618,35 +618,35 @@ class QuestionsController < ApplicationController
     end
   end
 
-  def scatter_votes_by_session
+  def scatter_votes_by_visitor
     type = params[:type] 
     @earl = Earl.find params[:id]
     @question = Question.new(:id => @earl.question_id)
 
-    votes_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
-    bounces_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'bounces'))
+    votes_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'votes'))
+    bounces_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'bounces'))
 
-    if bounces_by_sids != "\n"
+    if bounces_by_uids != "\n"
       bounce_hash = {}
-      bounces_by_sids.each do |k|
+      bounces_by_uids.each do |k|
         bounce_hash[k] = 0
       end
-      votes_by_sids.merge!(bounce_hash)
+      votes_by_uids.merge!(bounce_hash)
     end
 
     case type
     when "votes"
-      objects_by_sids = votes_by_sids
+      objects_by_uids = votes_by_uids
 
     when "skips"
-      skips_by_sids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
+      skips_by_uids = object_info_to_hash(@question.get(:object_info_by_user_id, :object_type => 'skips'))
 
-      skips_by_sids.each do |k,v|
-        votes_by_sids.delete(k)
+      skips_by_uids.each do |k,v|
+        votes_by_uids.delete(k)
       end
 
-      no_skips_size = votes_by_sids.size
-      objects_by_sids = skips_by_sids
+      no_skips_size = votes_by_uids.size
+      objects_by_uids = skips_by_uids
     end
 
     chart_data = []
@@ -654,7 +654,7 @@ class QuestionsController < ApplicationController
 
     jitter_const = 1
     max = 0
-    objects_by_sids.sort { |a,b| a[1].to_i <=> b[1].to_i}.each do |sid, votes|
+    objects_by_uids.sort { |a,b| a[1].to_i <=> b[1].to_i}.each do |sid, votes|
       point = {}
       point[:x] = votes
       max = votes.to_i if votes.to_i > max
@@ -669,7 +669,7 @@ class QuestionsController < ApplicationController
 
     tooltipformatter = "function() { return '<b>' + this.x + ' #{type.titleize} </b>' ; }"
     @votes_chart = Highchart.scatter({
-      :chart => { :renderTo => "scatter_#{type}_by_session-chart-container",
+      :chart => { :renderTo => "scatter_#{type}_by_visitor-chart-container",
         :margin => [50, 25, 60, 50],
         :borderColor =>  '#919191',
         :borderWidth =>  '1',
@@ -691,7 +691,7 @@ class QuestionsController < ApplicationController
 
     })
     respond_to do |format|
-      format.html { render :text => "<div id='scatter_#{type}_by_session-chart-container'></div><script>#{@votes_chart}</script>" }
+      format.html { render :text => "<div id='scatter_#{type}_by_visitor-chart-container'></div><script>#{@votes_chart}</script>" }
       format.js { render :text => @votes_chart }
     end
   end
