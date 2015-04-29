@@ -1,0 +1,69 @@
+@startuml
+
+package allourideas.org {
+DemographicsInfo :This is a placeholder for\na number of other types
+User : department
+User "1" -> "*" Earl 
+User "1" -> "*" SessionInfo
+'User "1" -> "*" Click
+User "1" -> "*" DemographicsInfo 
+Visitor "1" --> "*" SessionInfo 
+'SessionInfo "1" --> "*" Trial 
+'SessionInfo "1" --> "*" Click 
+Earl : question_id
+Earl : name
+Earl : welcome_message
+Earl : name
+Earl : logo
+note left of Visitor : IDtbd: Because all subjects must now be\nlogged in to vote, merge the User\nand Visitor models?
+note top of DemographicsInfo: IDtbd: The connections between the User\nand the various demographics specific\ntypes (e.g. Age, etc.) seem incompete.
+}
+
+
+
+package pairwise-api {
+Choice --> Visitor :creator
+Choice -> Question
+Choice :data
+Choice :title
+Choice "1" --> "*" Vote:votes
+Choice "1" --> "*" Vote :losing_votes
+'Choice "1" --> "*" Flag 
+Choice "1" --> "*" Prompt :prompts_on_the_left
+Choice "1" --> "*" Prompt :prompts_on_the_right
+Choice "1" --> "*" Appearance :appearances_on_the_left
+Choice "1" --> "*" Appearance :appearances_on_the_right
+Choice "1" --> "*" Skip:skips_on_the_left
+Choice "1" --> "*" Skip:skips_on_the_right
+Choice :prompts_count
+Choice:wins
+Choice:losses
+Choice:score
+Prompt "1" --> "*" Skip
+Prompt "1" --> "*" Vote 
+'Prompt "1" --> "*" Appearance 
+Prompt --> Choice : left_choice
+Prompt --> Choice : right_choice
+Prompt --> Question : question_id
+Question "1" --> "*" Choice 
+Question "1" --> "*" Prompt 
+Question "1" --> "*" Vote 
+Question "1" --> "*" Skip 
+'Question "1" --> "*" Density 
+'Question "1" --> "*" Appearance 
+'Question "1" --> "*" Export 
+Question:ideas
+Question:inactive_choices_count
+Question:active_items_count
+User "1" --> "*" Visitor 
+User "1" --> "*" Question 
+'User "1" --> "*" Click 
+Visitor "1" --> "*" Question  
+Visitor "1" --> "*" Vote  
+Visitor "1" --> "*" Skip  
+Visitor "1" --> "*" Choice  
+Visitor : site
+'Visitor "1" --> "*" Click 
+'Visitor "1" --> "*" Appearance 
+}
+@enduml
