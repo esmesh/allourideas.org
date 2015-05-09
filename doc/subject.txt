@@ -1,0 +1,18 @@
+@startuml 
+start
+repeat
+   :Subject is presented with the
+    question and a pair of choices;
+   fork
+      :Pick left or right
+       side option ;
+   fork again 
+      :Select "I can't decide" ;
+      :Provide reason;
+   fork again 
+      :Provide an 
+      alternative option ;
+   end fork 
+repeat while (Vote again?) 
+stop
+@enduml 
