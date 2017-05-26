@@ -1,0 +1,11 @@
+## Show all users
+select id,email,admin from aoi_production.users;
+
+## Delete user by ID 
+delete from aoi_production.users where id=#;
+
+## Make user with ID # into an admin
+update aoi_production.users set admin=1 where id=#;
+
+
+
