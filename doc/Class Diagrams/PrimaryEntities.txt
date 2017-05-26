@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+class "Subject" as sub {
+	profile: Attribute[1..*]
+}
+
+class "Decision\nFactor" as DF {
+	getScore(filter:Attribute[])
+	getAssociations(filter:Attribute[])
+}
+class "SE\nPractice" as SE
+class "DF Vote" as dfVote {
+	result: [WIN | LOSS | SKIP]
+}
+dfVote o-- sub
+DF o-- "*" dfVote
+
+
+class "Association" as assoc {
+	getScore(filter:Attribute[])
+}
+class "Association\nVote" as assocVote {
+	result: [WIN | LOSS | SKIP]
+}
+assoc o-- "*" assocVote
+assocVote o-- sub
+assoc o-- SE
+
+DF  *-- "*" assoc
+
+class root
+root -> SE
+root -> DF
+
+@enduml
